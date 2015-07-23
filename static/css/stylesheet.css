@@ -1,0 +1,229 @@
+/*begin our styles*/
+ 
+body {
+    font: 16px/1.4em 'PT Sans', sans-serif;;
+    color: #1c1c1c;
+}
+ 
+p,
+ul {
+    margin: 0 0 1.5em;
+}
+ 
+ul {
+    list-style: disc;
+    padding: 0 0 0 20px;
+}
+ 
+a {
+    color: #1D745A;
+}
+ 
+h2 {
+    font-family: 'PT Serif', serif;
+    font-size: 32px;
+    line-height: 1.4em;
+    margin: 0 0 .4em;
+    font-weight: bold;
+}
+ 
+/*layout*/
+ 
+.wrapper {
+}
+ 
+div {
+    border-bottom: 1px solid #d8d8d8;
+    padding: 5px 20px 0 20px;
+    margin: 10px 0;
+}
+
+#footer_wrap {
+    border-bottom: none;
+}
+ 
+/*header*/
+ 
+a.to_nav {
+    float: right;
+    color: #fff;
+    background: #4e4e4e;
+    text-decoration: none;
+    padding: 6px 18px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 22px;
+    height: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+ 
+a.to_nav:hover,
+a.to_nav:focus {
+    color: #1c1c1c;
+    background: #ccc;
+}
+
+/*navigation*/ 
+ 
+#menubar ul {
+    list-style: none;
+    background: #4e4e4e;
+    padding: 5px 0;
+}
+ 
+#menubar li a {
+    display: block;
+    padding: 0 20px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    letter-spacing: 0.1em;
+    line-height: 2em;
+    height: 2em;
+    border-bottom: 1px solid #383838;
+}
+ 
+#menubar li:last-child a {
+    border-bottom: none;
+}
+ 
+#menubar li a:hover,
+#menubar li a:focus {
+    color: #1c1c1c;
+    background: #ccc;
+}
+ 
+/*footer*/
+ 
+footer {
+    font-family: 'PT Serif', serif;
+    font-style: italic;
+    text-align: center;
+    font-size: 14px;
+}
+
+@media only screen and (min-width: 768px) {
+ 
+    a.to_nav {
+        display: none;
+    }
+
+    #menubar li.back-to-top {
+        display: none;
+    }
+     
+    .wrapper {
+        position: relative;
+        width: 768px;
+        margin: auto;
+    }
+     
+    #menubar {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        background-color: #E1E1E1;
+    }
+
+    #menubar ul {
+        background-color: #E1E1E1;
+    }
+     
+    #menubar li {
+        display: inline;
+        padding: 10px;
+        float: left;
+    }
+     
+    #menubar li a {
+        float: left;
+        color: #fff;
+        background: #4e4e4e;
+        border: none;
+        text-decoration: none;
+        padding: 6px 18px;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 22px;
+        height: 22px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    #menubar li a:hover,
+    #menubar li a:focus {
+        color: #1c1c1c;
+        background: #ccc;
+    }
+}
+
+/* Search bar */
+
+form {
+    margin: auto;
+    text-align: center;
+}
+
+#search_bar {
+    width: 50%;
+    padding:15px 20px 15px 10px;
+    background:rgba(50, 50, 50, 0.2);
+    border:0px solid #dbdbdb;
+    font: 24px/1.4em 'PT Sans', sans-serif;;
+
+}
+#search_bar:focus {
+    outline: none;
+}
+
+#search_button {
+    position: relative;
+    padding: 23px 40px 23px 40px;
+    left: -8px;
+    top: -3px;
+    border: 2px solid #F0391B;
+    background-color: #F0391B;
+    color: #fafafa;
+    font: 'PT Sans';
+}
+
+#search_button:hover,
+#search_button:focus  {
+    background-color:#fafafa;
+    color:#F0391B;
+}
+
+::-webkit-input-placeholder { /* For WebKit browsers */
+    font: 24px/1.4em 'PT Sans', sans-serif;;
+    color: #1c1c1c;
+}
+:-moz-placeholder { /* For Mozilla Firefox 4 to 18 */
+    font: 24px/1.4em 'PT Sans', sans-serif;;
+    color: #1c1c1c;
+}
+::-moz-placeholder { /* For Mozilla Firefox 19+ */
+    font: 24px/1.4em 'PT Sans', sans-serif;;
+    color: #1c1c1c;
+}
+:-ms-input-placeholder { /* For Internet Explorer 10+ */
+    font: 24px/1.4em 'PT Sans', sans-serif;;
+    color: #1c1c1c;
+}
+
+#logo {
+    width: 174px;
+    height: 64px;
+}
+
+
+
+

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body id="top">
+
+    <div id="wrapper">
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <% include ../partials/header %>
+            </header>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer">
+            <section id="main_content" class="inner">
+                <form id="main_search_bar" onsubmit="doSearch(this)">
+                    <span id="search_bar_spacing">
+                        <input type="search" id="search_bar" name="searchvalue" placeholder="Search..." required>
+                    </span>
+                    <input type="button" id="search_button" value="Search">
+                </form>
+                <br>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <% include ../partials/footer %>
+            </footer>
+        </div>
+
+    </div><!-- END WRAPPER -->
+
+</body>
+
+<% include ../partials/navbar %>
+
+</html>
