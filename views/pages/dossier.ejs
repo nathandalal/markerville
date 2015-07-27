@@ -18,8 +18,23 @@
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
                 <section id="dossier">
-                    <h3><p><%= biomarker %></p></h3>
+                    <h1><p><%= biomarkerName %></p></h1>
 
+                    <p class="dossier_label">Type:&nbsp;&nbsp;</p><%= biomarkerInfo.Type %>
+
+                    <br><br>
+                    <p class="dossier_label">Alternate Names:&nbsp;&nbsp;</p>
+                    <ul>
+                        <% biomarkerInfo.Names.forEach(function(name) { %>
+                            <li><%= name %></li>
+                        <% }); %>
+                    </ul>
+
+                    <% if(biomarkerInfo["Drug_Name(if_FDA_Approved)"]) { %> <%= user.name %> <% } %>
+
+                    <p class="dossier_label">State Change:&nbsp;&nbsp;</p><%= biomarkerInfo.State_Change %>
+
+                    <br><br><br>
                 </section>
             </section>
         </div>

@@ -1,3 +1,4 @@
+var port = 8080;
 /*
 var jsonfile = require('jsonfile');
 var util = require('util');
@@ -5,6 +6,7 @@ jsonfile.writeFile("/temp_files/response.json", response, {spaces: 4}, function 
     console.error(err);
 });
 */
+fs = require('fs');
 
 //msyql setup
 var mysql = require('mysql');
@@ -79,10 +81,25 @@ app.get('/', function (request, response) {
     var biomarkerName = request.query['biomarker'];
     if (biomarkerName == undefined)
         response.render('pages/index');
-    else
-        response.render('pages/dossier', {
-            biomarker: biomarkerName
-        });
+    else {
+        var biomarkerJSON = JSON.parse(fs.readFileSync("static/temp_files/biomarker_sample.json", "utf8"));
+
+        var biomarkerList = [];
+        for (var marker in biomarkerJSON)
+            biomarkerList.push(marker);
+
+        if (biomarkerJSON[biomarkerName] !== undefined) {
+            biomarkerJSON = biomarkerJSON[biomarkerName];
+            console.log(biomarkerJSON);
+            response.render('pages/dossier', {
+                biomarkerName: biomarkerName,
+                biomarkerInfo: biomarkerJSON
+            });
+        }
+        else {
+            response.render('pages/404');
+        }
+    }
 });
 
 app.get("/about", function (request, response) {
@@ -118,8 +135,8 @@ app.use(function (error, request, response, next) {
 
 
 //listen on localhost
-app.listen(8080);
-console.log('listening on http://localhost:8080');
+app.listen(port);
+console.log('listening on http://localhost:' + port);
 
 //end mysql connection
 connection.end();
