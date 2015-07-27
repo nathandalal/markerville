@@ -1,3 +1,11 @@
+/*
+var jsonfile = require('jsonfile');
+var util = require('util');
+jsonfile.writeFile("/temp_files/response.json", response, {spaces: 4}, function (err) {
+    console.error(err);
+});
+*/
+
 //msyql setup
 var mysql = require('mysql');
 
@@ -18,6 +26,7 @@ connection.connect(function(err) {
     console.log('connected as id ' + connection.threadId);
 });
 
+/*
 var querystring = "SELECT * FROM CHARACTER_SETS;";
 
 connection.query(querystring, function(err, rows, fields) {
@@ -28,12 +37,19 @@ connection.query(querystring, function(err, rows, fields) {
         console.log(rows[i]);
     }
 });
-
-connection.end();
+*/
 
 //express setup
 var express = require('express');
+var expose = require('express-expose');
 var app = express();
+//app = expose(app);
+
+/*
+//serve favicon
+var favicon = require('serve-favicon');
+app.use(favicon(__dirname + '/static/images/favicon.ico'));
+*/
 
 //set view engine to ejs
 app.set('view engine', 'ejs');
@@ -52,11 +68,58 @@ function activatePage(viewsPath) {
     });
 }
 
-activatePage("/");
-activatePage("/about");
-activatePage("/login");
-activatePage("/signup");
+/*
+app.expose(function random() {
+    console.log(748372985473);
+}, "printNumber");
+*/
+
+app.get('/', function (request, response) {
+    console.log('got a GET request from index');
+    var biomarkerName = request.query['biomarker'];
+    if (biomarkerName == undefined)
+        response.render('pages/index');
+    else
+        response.render('pages/dossier', {
+            biomarker: biomarkerName
+        });
+});
+
+app.get("/about", function (request, response) {
+    response.render('pages/about');
+    console.log('got a GET request from about');
+});
+
+app.get("/login", function (request, response) {
+    response.render('pages/login');
+    console.log('got a GET request from login');
+});
+app.post('/login', function (request, response) {
+    console.log("got a login POST request");
+});
+
+app.get("/signup", function (request, response) {
+    response.render('pages/signup');
+    console.log('got a GET request from signup');
+});
+
+// Handle 404 - Page Not Found
+app.use(function (request, response) {
+    response.status(400);
+    response.render('pages/404');
+});
+  
+// Handle 500 - Internal Server Error
+app.use(function (error, request, response, next) {
+    response.status(500);
+    response.render('pages/500');
+    console.log("Internal server error: \n" + error);
+});
+
 
 //listen on localhost
 app.listen(8080);
 console.log('listening on http://localhost:8080');
+
+//end mysql connection
+connection.end();

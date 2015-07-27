@@ -170,6 +170,9 @@ footer {
 
 form {
     margin: auto;
+}
+
+#main_search_bar {
     text-align: center;
 }
 
@@ -202,6 +205,20 @@ form {
     color:#F0391B;
 }
 
+#login_button {
+    padding: 10px 20px 10px 20px;
+    position: relative;
+    border: 2px solid #F0391B;
+    background-color: #F0391B;
+    color: #fafafa;
+    font: 'PT Sans';
+}
+#login_button:hover,
+#login_button:focus  {
+    background-color:#fafafa;
+    color:#F0391B;
+}
+
 ::-webkit-input-placeholder { /* For WebKit browsers */
     font: 24px/1.4em 'PT Sans', sans-serif;;
     color: #1c1c1c;
@@ -224,6 +241,12 @@ form {
     height: 64px;
 }
 
+h3 {
+    font-size: 1.60em;
+}
 
+#dossier h3 {
+    text-transform: uppercase;
+}
 
 
