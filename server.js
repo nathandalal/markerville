@@ -1,5 +1,5 @@
 var port = 8080;
-fs = require('fs');
+var fs = require('fs');
 
 //msyql setup
 var mysql = require('mysql');
@@ -36,7 +36,6 @@ connection.query(querystring, function(err, rows, fields) {
 
 //express setup
 var express = require('express');
-var expose = require('express-expose');
 var app = express();
 
 //add body parser to read post requests

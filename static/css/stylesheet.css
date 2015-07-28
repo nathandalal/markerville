@@ -190,7 +190,7 @@ form {
 
 #search_button {
     position: relative;
-    padding: 20px 40px 22px 40px;
+    padding: 20px 40px 23px 40px;
     left: -8px;
     top: -3px;
     border: 2px solid #F0391B;
@@ -249,6 +249,7 @@ form {
 li.attribute {
     display: inline-block;
     text-align: center;
+    padding: 0px 50px;
 }
 
 li.attribute h3 {
