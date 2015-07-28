@@ -17,15 +17,20 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
+                <% if(typeof create_account_problem_text!='undefined' && create_account_problem_text!=undefined) { %>
+                    <span>
+                        <%= create_account_problem_text %><br>
+                    </span>
+                <% } %>
                 <br>
                 <form id="signup_form" method="post">
                     Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="email" name="usremail" required>
+                    <input type="email" name="user[email]" required>
                     <br><br>
                     Password:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="password" name="pwd" required>
+                    <input type="password" name="user[pwd]" required>
                     <br><br>
-                    Repeat Password:&nbsp;&nbsp;  <input type="password" name="pwd" required>
+                    Repeat Password:&nbsp;&nbsp;  <input type="password" name="user[repeatpwd]" required>
                     <br><br>
                     <input type="submit" id="submit_button" value="Sign Up">
                     <br><br>

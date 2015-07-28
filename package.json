@@ -9,6 +9,7 @@
     "express-expose": "^0.3.4",
     "mysql": "2.8.0",
     "serve-favicon": "2.3.0",
-    "jsonfile": "2.2.1"
+    "jsonfile": "2.2.1",
+    "body-parser": "1.13.2"
   }
 }

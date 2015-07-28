@@ -1,11 +1,4 @@
 var port = 8080;
-/*
-var jsonfile = require('jsonfile');
-var util = require('util');
-jsonfile.writeFile("/temp_files/response.json", response, {spaces: 4}, function (err) {
-    console.error(err);
-});
-*/
 fs = require('fs');
 
 //msyql setup
@@ -45,13 +38,13 @@ connection.query(querystring, function(err, rows, fields) {
 var express = require('express');
 var expose = require('express-expose');
 var app = express();
-//app = expose(app);
 
-/*
-//serve favicon
-var favicon = require('serve-favicon');
-app.use(favicon(__dirname + '/static/images/favicon.ico'));
-*/
+//add body parser to read post requests
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());         // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 //set view engine to ejs
 app.set('view engine', 'ejs');
@@ -59,23 +52,7 @@ app.set('view engine', 'ejs');
 //give static access to 'static' directory
 app.use(express.static('static'));
 
-// use response.render to load up an ejs view file
-// render will by default look in views subfolder -- no need to specify
-function activatePage(viewsPath) {
-    app.get(viewsPath, function(request, response) {
-        if(viewsPath == '/')
-            response.render('pages/index');
-        else
-            response.render('pages' + viewsPath);
-    });
-}
-
-/*
-app.expose(function random() {
-    console.log(748372985473);
-}, "printNumber");
-*/
-
+//routing index
 app.get('/', function (request, response) {
     console.log('got a GET request from index');
     var biomarkerName = request.query['biomarker'];
@@ -107,11 +84,13 @@ app.get('/', function (request, response) {
     }
 });
 
+//routing about
 app.get("/about", function (request, response) {
     response.render('pages/about');
     console.log('got a GET request from about');
 });
 
+//routing login
 app.get("/login", function (request, response) {
     response.render('pages/login');
     console.log('got a GET request from login');
@@ -120,18 +99,31 @@ app.post('/login', function (request, response) {
     console.log("got a login POST request");
 });
 
-app.get("/signup", function (request, response) {
+//routing signup
+app.get('/signup', function (request, response) {
     response.render('pages/signup');
     console.log('got a GET request from signup');
 });
+app.post('/signup', function (request, response) {
+    if (request.body.user.pwd !== request.body.user.repeatpwd) {
+        response.render('pages/signup', {
+            create_account_problem_text: "Passwords did not match. Please try again."
+        });
+    }
+    else {
+        response.render('pages/account_creation_success', {
+            email: request.body.user.email
+        });
+    }
+});
 
-// Handle 404 - Page Not Found
+// routing 404 event
 app.use(function (request, response) {
     response.status(400);
     response.render('pages/404');
 });
   
-// Handle 500 - Internal Server Error
+// routing 500 event
 app.use(function (error, request, response, next) {
     response.status(500);
     response.render('pages/500');
