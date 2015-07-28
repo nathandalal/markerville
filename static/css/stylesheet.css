@@ -190,14 +190,14 @@ form {
 
 #search_button {
     position: relative;
-    padding: 22px 40px 22px 40px;
+    padding: 20px 40px 22px 40px;
     left: -8px;
     top: -3px;
     border: 2px solid #F0391B;
     background-color: #F0391B;
     color: #fafafa;
     font: 'PT Sans';
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #search_button:hover,

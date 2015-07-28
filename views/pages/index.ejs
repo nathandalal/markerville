@@ -17,6 +17,12 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
+                <% if(search_failed) { %>
+                    <div style="text-align: center;">
+                        <strong><%= biomarkerName %></strong>
+                        could not be found in the Markerville database.<br><br>
+                    </div>
+                <% } %>
                 <form id="main_search_bar" method="get">
                     <span id="search_bar_spacing">
                         <input type="search" id="search_bar" name="biomarker" placeholder="Search..." required>

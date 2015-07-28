@@ -80,8 +80,11 @@ app.get('/', function (request, response) {
     console.log('got a GET request from index');
     var biomarkerName = request.query['biomarker'];
     if (biomarkerName == undefined)
-        response.render('pages/index');
+        response.render('pages/index', {
+            search_failed: false
+        });
     else {
+        biomarkerName = biomarkerName.toUpperCase();
         var biomarkerJSON = JSON.parse(fs.readFileSync("static/temp_files/biomarker_sample.json", "utf8"));
 
         var biomarkerList = [];
@@ -90,14 +93,16 @@ app.get('/', function (request, response) {
 
         if (biomarkerJSON[biomarkerName] !== undefined) {
             biomarkerJSON = biomarkerJSON[biomarkerName];
-            console.log(biomarkerJSON);
             response.render('pages/dossier', {
                 biomarkerName: biomarkerName,
                 biomarkerInfo: biomarkerJSON
             });
         }
         else {
-            response.render('pages/404');
+            response.render('pages/index', {
+                search_failed: true,
+                biomarkerName: biomarkerName
+            });
         }
     }
 });
