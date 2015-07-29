@@ -4,26 +4,25 @@ var querystring = "";
 var port = 8080;
 var fs = require('fs');
 
+//express setup
 var express = require('express');
 var app = express();
 
+//add body parser to read post requests
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());         // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
+
+//set view engine to ejs
+app.set('view engine', 'ejs');
+
+//give static access to 'static' directory
+app.use(express.static('static'));
+
 queries.getHomepageNumbers(function(homepageStats) {
-
     module.exports.homepageStats = homepageStats;
-    //express setup
-
-    //add body parser to read post requests
-    var bodyParser = require('body-parser')
-    app.use(bodyParser.json());         // to support JSON-encoded bodies
-    app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-        extended: true
-    }));
-
-    //set view engine to ejs
-    app.set('view engine', 'ejs');
-
-    //give static access to 'static' directory
-    app.use(express.static('static'));
 
     //routing index
     app.get('/', function (request, response) {

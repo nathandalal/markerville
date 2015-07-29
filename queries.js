@@ -41,7 +41,6 @@ function getDossierInfo(biomarkerName, response, callback) {
     pool.query(querystring, [biomarkerName], function(err, rows, fields) {
         if (err) {
             throw err;
-            return;
         }
 
         if( !(typeof rows != "undefined" && rows != null && rows.length > 0) ) {
@@ -55,15 +54,23 @@ function getDossierInfo(biomarkerName, response, callback) {
         }
         else {
             querystring = "SELECT * from Biomolecules WHERE pk_Biomolecules=" + rows[0].fk_Biomolecules + ";" +
-                            "SELECT Name from Biomolecule_Names where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";";
+                            "SELECT Name from Biomolecule_Names where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";" +
+                            "SELECT * from Biomolecules_Sources_Association where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";";
             pool.query(querystring, function(err, rows, fields) {
                 if (err) {
                     throw err;
-                    return;
                 }
+
+                //add all alternate names
                 biomarkerInfo["Alternate Names"] = [];
+                biomarkerInfo["Drug Names"] = [];
+
                 for(var jsonE in rows[1]) {
                     biomarkerInfo["Alternate Names"].push(rows[1][jsonE].Name);
+                }
+
+                for(var jsonE in rows[2]) {
+                    biomarkerInfo["Drug Names"].push(rows[2][jsonE].Drug_Name);
                 }
 
                 querystring = "SELECT Medium from Biomolecule_Medium WHERE pk_Biomolecule_Medium=" + rows[0][0].fk_Biomolecule_Medium + ";" +
@@ -71,7 +78,6 @@ function getDossierInfo(biomarkerName, response, callback) {
                 pool.query(querystring, [rows[0][0].fk_Biomolecule_Medium, rows[0][0].fk_Biomolecule_Type], function(err, rows, fields) {
                     if (err) {
                         throw err;
-                        return;
                     }
 
                     biomarkerInfo['Medium'] = rows[0][0]['Medium'];
