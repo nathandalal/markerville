@@ -19,39 +19,27 @@
             <section id="main_content" class="inner">
                 <section id="dossier">
 
-                    <div><h1><%= biomarkerName %></h1><br></div>
+                    <div><h1><%= biomarkerInfo['Name'] %></h1><br></div>
 
                     <div id="accordion">
                         <section id="biomarkerInfoAccordionSection">
                             <p class="pointer">&#9654;</p><h1><a href="#">Biomolecule Info</a></h1>
                             <p>
                                 <p class="dossier_label">Type:&nbsp;&nbsp;</p>
-                                <%= biomarkerInfo.Type %>
+                                <%= biomarkerInfo['Type'] %>
                             </p>
 
                             <p>
-                                <p class="dossier_label">Disease:&nbsp;&nbsp;</p>
-                                <%= biomarkerInfo.Disease %>
-                                <% if(biomarkerInfo["Disease_Stage"]) { %>
-                                    (<%= biomarkerInfo.Disease_Stage %>)
-                                <% } %>
+                                <p class="dossier_label">Medium:&nbsp;&nbsp;</p>
+                                <%= biomarkerInfo['Medium'] %>
                             </p>
 
                             <p class="dossier_label">Alternate Names:&nbsp;&nbsp;</p>
                             <ul>
-                                <% biomarkerInfo.Names.forEach(function(name) { %>
+                                <% biomarkerInfo['Alternate Names'].forEach(function(name) { %>
                                     <li><%= name %></li>
                                 <% }); %>
                             </ul>
-
-                            <% if(biomarkerInfo["Drug_Name(if_FDA_Approved)"]) { %>
-                                <p>
-                                    <p class="dossier_label">Drug Name:&nbsp;&nbsp;</p>
-                                    <%= biomarkerInfo["Drug_Name(if_FDA_Approved)"] %>
-                                <p>
-                            <% } %>
-
-                            <p><p class="dossier_label">State Change:&nbsp;&nbsp;</p><%= biomarkerInfo.State_Change %></p>
 
                             <br>
                         </section>
@@ -61,7 +49,9 @@
                         </section>
                         <section id="item3" class="ac_hidden">
                             <p class="pointer">&#9654;</p><h1><a href="#">Contributors</a></h1>
-                            <p>Coming Soon... </p>
+                            <p>Nathan Dalal </p>
+                            <p>Mythri Ambatipudi </p>
+                            <p>No dynamic contributors displayed yet. Coming soon... </p>
                         </section>
                     </div>
 
