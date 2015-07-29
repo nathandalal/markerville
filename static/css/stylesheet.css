@@ -270,3 +270,65 @@ h1 {
     display: inline;
     font-weight: bold;
 }
+
+#accordion section, #accordion .pointer, #accordion h1, #accordion p {
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+#accordion {
+    margin-bottom:30px;
+    padding-bottom: 30px;
+}
+#accordion h1 {
+    line-height:1.2;
+    font-size:20px;
+    background-color:rgba(235,61,0,0.6);
+    margin:0;
+    padding: 10px 10px 10px 30px;
+}
+
+#accordion h1 a {
+    color:black;
+}
+#accordion section {
+    overflow:hidden;
+    border:1px #333 solid;
+}
+#accordion p {
+    color:black;
+}
+#accordion section.ac_hidden p:not(.pointer) {
+    color: #fff;
+}
+
+#accordion section.ac_hidden {
+    height:44px;
+}
+#accordion .pointer {
+    padding:0;
+    margin:10px 0 0 6px;
+    line-height:20px;
+    width:13px;
+    position:absolute;
+}
+#accordion section:not(.ac_hidden) h1 {
+    background-color:rgba(235,61,0,1);
+}
+
+#accordion section:not(.ac_hidden) .pointer {
+    display:block;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -o-transform:rotate(90deg);
+    transform:rotate(90deg);
+    padding:0;
+}
+#accordion section p:not(:first-of-type) {
+    padding-left: 25px;
+    padding-right: 0px;
+}
+#accordion section ul {
+    margin-left: 25px;
+}

@@ -17,12 +17,17 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
+                <% if(typeof login_problem_text!='undefined' && login_problem_text!=undefined) { %>
+                    <span>
+                        <%= login_problem_text %><br>
+                    </span>
+                <% } %>
                 <br>
                 <form id="login_form" onsubmit="doLogin(this);" method="post">
                     Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                    <input type="email" name="usremail" required>
+                    <input type="email" name="user[email]" required>
                     <br><br>
-                    Password:&nbsp;&nbsp;  <input type="password" name="pwd" required>
+                    Password:&nbsp;&nbsp;  <input type="password" name="user[pwd]" required>
                     <br><br>
                     <input type="submit" id="submit_button" value="Log In">
                     <br><br>

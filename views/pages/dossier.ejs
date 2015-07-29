@@ -18,38 +18,53 @@
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
                 <section id="dossier">
-                    <h1><%= biomarkerName %></h1>
 
-                    <p>
-                        <p class="dossier_label">Type:&nbsp;&nbsp;</p>
-                        <%= biomarkerInfo.Type %>
-                    </p>
+                    <div><h1><%= biomarkerName %></h1><br></div>
 
-                    <p>
-                        <p class="dossier_label">Disease:&nbsp;&nbsp;</p>
-                        <%= biomarkerInfo.Disease %>
-                        <% if(biomarkerInfo["Disease_Stage"]) { %>
-                            (<%= biomarkerInfo.Disease_Stage %>)
-                        <% } %>
-                    </p>
+                    <div id="accordion">
+                        <section id="biomarkerInfoAccordionSection">
+                            <p class="pointer">&#9654;</p><h1><a href="#">Biomolecule Info</a></h1>
+                            <p>
+                                <p class="dossier_label">Type:&nbsp;&nbsp;</p>
+                                <%= biomarkerInfo.Type %>
+                            </p>
 
-                    <p class="dossier_label">Alternate Names:&nbsp;&nbsp;</p>
-                    <ul>
-                        <% biomarkerInfo.Names.forEach(function(name) { %>
-                            <li><%= name %></li>
-                        <% }); %>
-                    </ul>
+                            <p>
+                                <p class="dossier_label">Disease:&nbsp;&nbsp;</p>
+                                <%= biomarkerInfo.Disease %>
+                                <% if(biomarkerInfo["Disease_Stage"]) { %>
+                                    (<%= biomarkerInfo.Disease_Stage %>)
+                                <% } %>
+                            </p>
 
-                    <% if(biomarkerInfo["Drug_Name(if_FDA_Approved)"]) { %>
-                        <p>
-                            <p class="dossier_label">Drug Name:&nbsp;&nbsp;</p>
-                            <%= biomarkerInfo["Drug_Name(if_FDA_Approved)"] %>
-                        <p>
-                    <% } %>
+                            <p class="dossier_label">Alternate Names:&nbsp;&nbsp;</p>
+                            <ul>
+                                <% biomarkerInfo.Names.forEach(function(name) { %>
+                                    <li><%= name %></li>
+                                <% }); %>
+                            </ul>
 
-                    <p><p class="dossier_label">State Change:&nbsp;&nbsp;</p><%= biomarkerInfo.State_Change %></p>
+                            <% if(biomarkerInfo["Drug_Name(if_FDA_Approved)"]) { %>
+                                <p>
+                                    <p class="dossier_label">Drug Name:&nbsp;&nbsp;</p>
+                                    <%= biomarkerInfo["Drug_Name(if_FDA_Approved)"] %>
+                                <p>
+                            <% } %>
 
-                    <br>
+                            <p><p class="dossier_label">State Change:&nbsp;&nbsp;</p><%= biomarkerInfo.State_Change %></p>
+
+                            <br>
+                        </section>
+                        <section id="item2" class="ac_hidden">
+                            <p class="pointer">&#9654;</p><h1><a href="#">Referenced Papers</a></h1>
+                            <p>Coming Soon... </p>
+                        </section>
+                        <section id="item3" class="ac_hidden">
+                            <p class="pointer">&#9654;</p><h1><a href="#">Contributors</a></h1>
+                            <p>Coming Soon... </p>
+                        </section>
+                    </div>
+
                 </section>
             </section>
         </div>
