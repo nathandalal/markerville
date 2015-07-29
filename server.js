@@ -1,7 +1,7 @@
 var queries = require("./queries.js");
 
 var querystring = "";
-var port = 7777;
+var port = 8080;
 var fs = require('fs');
 
 var express = require('express');
