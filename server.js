@@ -3,7 +3,6 @@ var queries = require("./queries.js");
 var querystring = "";
 var port = 7777;
 var fs = require('fs');
-var async = require("async");
 
 var express = require('express');
 var app = express();
