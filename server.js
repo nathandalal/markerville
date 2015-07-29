@@ -1,7 +1,7 @@
 var queries = require("./queries.js");
 
 var querystring = "";
-var port = 8080;
+var port = 7777;
 var fs = require('fs');
 
 //express setup
