@@ -3,6 +3,7 @@ var queries = require("./queries.js");
 var querystring = "";
 var port = 7777;
 var fs = require('fs');
+var md5 = require('blueimp-md5').md5;
 
 //express setup
 var express = require('express');
@@ -86,14 +87,33 @@ queries.getHomepageNumbers(function(homepageStats) {
                 create_account_problem_text: "Passwords did not match. Please try again."
             });
         }
+        else if (request.body.user.firstname.length == 0) {
+            response.render('pages/signup', {
+                create_account_problem_text: "First Name is a required field and is left blank."
+            });
+        }
+        else if (request.body.user.lastname.length == 0) {
+            response.render('pages/signup', {
+                create_account_problem_text: "Last Name is a required field and is left blank."
+            });
+        }
         else if (request.body.user.pwd.length < 5) {
             response.render('pages/signup', {
                 create_account_problem_text: "Password must contain at least 5 characters. Please try again."
             });
         }
         else {
-            response.render('pages/account_creation/success', {
-                email: request.body.user.email
+            queries.createUnverifiedAccount({
+                firstName: request.body.user.firstname,
+                lastName: request.body.user.lastname,
+                email: request.body.user.email,
+                pass: request.body.user.pwd
+            }, response, function(success) {
+                if(success) {
+                    response.render('pages/account_creation/unverified', {
+                        email: request.body.user.email
+                    });
+                }
             });
         }
     });

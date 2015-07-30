@@ -1,3 +1,7 @@
+# Private files #
+#################
+static/private_json/*
+
 # OS generated files #
 ######################
 .DS_Store

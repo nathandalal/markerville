@@ -1,21 +1,17 @@
-var server = require("./server.js")
+var server = require("./server.js");
+var md5 = require('blueimp-md5').md5;
+var fs = require('fs');
 
 //msyql setup
 var mysql = require('mysql');
 
 //create mysql pool
-var pool = mysql.createPool({
-    host     : 'canaryctr-donald.stanford.edu',
-    user     : 'markerville_user',
-    password : 'b1omark3rsRock!',
-    database : 'MARKERVILLE',
-    multipleStatements: true
-});
+var pool = mysql.createPool(JSON.parse(fs.readFileSync("./static/private_json/mysql_connection.json", "utf8")));
 
 function getHomepageNumbers(callback) {
     var querystring = "SELECT COUNT(*) FROM Biomolecules;" +
-                        "SELECT COUNT(*) FROM Diseases;" +
-                        "SELECT COUNT(*) FROM Users;";
+                      "SELECT COUNT(*) FROM Diseases;" +
+                      "SELECT COUNT(*) FROM Users;";
 
     pool.query(querystring, function(err, rows, fields) {
         if (err) {
@@ -32,6 +28,7 @@ function getHomepageNumbers(callback) {
 }
 
 function getDossierInfo(biomarkerName, response, callback) {
+    var querystring = "";
     var biomarkerInfo = {
         Name: biomarkerName
     };
@@ -52,11 +49,11 @@ function getDossierInfo(biomarkerName, response, callback) {
             });
         }
         else {
-            biomarkerInfo["Biomarker MySQL ID"] = rows[0].fk_Biomolecules;
+            biomarkerInfo["Biomolecule MySQL ID"] = rows[0].fk_Biomolecules;
 
             querystring = "SELECT * from Biomolecules WHERE pk_Biomolecules=" + rows[0].fk_Biomolecules + ";" +
-                            "SELECT Name from Biomolecule_Names where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";" +
-                            "SELECT * from Biomolecules_Sources_Association where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";";
+                          "SELECT Name from Biomolecule_Names where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";" +
+                          "SELECT * from Biomolecules_Sources_Association where fk_Biomolecules=" + rows[0].fk_Biomolecules + ";";
             pool.query(querystring, function(err, rows, fields) {
                 if (err) {
                     throw err;
@@ -64,9 +61,6 @@ function getDossierInfo(biomarkerName, response, callback) {
 
                 //flat arrays
                 biomarkerInfo["Alternate Names"] = [];
-
-                //array of objects
-                biomarkerInfo["Papers"] = [{}];
 
                 //getting alternate names for biomarker
                 for(var jsonE in rows[1]) {
@@ -77,10 +71,15 @@ function getDossierInfo(biomarkerName, response, callback) {
                         biomarkerInfo['Name'] = newName;
                 }
 
-                //could be multiple papers for one biomarker - begin reading info into papers section of biomarkerInfo
+                //array of objects
+                biomarkerInfo["Sources"] = [{}];
+
+                //could be multiple sources for one biomarker - begin reading info into sources section of biomarkerInfo
                 for(var jsonE in rows[2]) {
+                    biomarkerInfo['Sources'][jsonE]["Source MySQL ID"] = rows[2][jsonE].fk_Sources;
+
                     //load array of trial objects into individual paper object
-                    biomarkerInfo['Papers'][jsonE]["Trials"] = [];
+                    biomarkerInfo['Sources'][jsonE]["Trials"] = [];
                     querystring = "SELECT * from Trial WHERE fk_Sources=" + rows[2][jsonE].fk_Sources + ";";
                     pool.query(querystring, function(err, rows, fields) {
                         if (err) {
@@ -95,7 +94,7 @@ function getDossierInfo(biomarkerName, response, callback) {
                                     throw err;
                                 }
 
-                                biomarkerInfo['Papers'][jsonE]["Trials"].push({
+                                biomarkerInfo['Sources'][jsonE]["Trials"].push({
                                     '# Patients': numPatients,
                                     'Discovery Method': rows[0].Discovery_Method
                                 });
@@ -105,27 +104,27 @@ function getDossierInfo(biomarkerName, response, callback) {
                     });
 
                     //create flat arr of other biomarkers
-                    biomarkerInfo['Papers'][jsonE]["Other Biomarkers"] = [];
+                    biomarkerInfo['Sources'][jsonE]["Other Biomarkers"] = [];
 
-                    biomarkerInfo["Papers"][jsonE]["Biomolecule State"] = rows[2][jsonE].Biomolecule_State;
-                    biomarkerInfo["Papers"][jsonE]["Drug Name"] = rows[2][jsonE].Drug_Name;
+                    biomarkerInfo["Sources"][jsonE]["Biomolecule State"] = rows[2][jsonE].Biomolecule_State;
+                    biomarkerInfo["Sources"][jsonE]["Drug Name"] = rows[2][jsonE].Drug_Name;
 
                     querystring = "SELECT Disease from Diseases WHERE pk_Diseases=" + rows[2][jsonE].fk_Diseases + ";" +
-                                    "SELECT Purpose FROM Biomarker_Purpose WHERE pk_Biomarker_Purpose=" + rows[2][jsonE].fk_Biomarker_Purpose + ";" +
-                                    "SELECT * FROM Sources WHERE pk_Sources=" + rows[2][jsonE].fk_Sources + ";" +
-                                    "SELECT fk_Biomolecules FROM Biomolecules_Sources_Association WHERE fk_Sources=" + rows[2][jsonE].fk_Sources + ";";
+                                  "SELECT Purpose FROM Biomarker_Purpose WHERE pk_Biomarker_Purpose=" + rows[2][jsonE].fk_Biomarker_Purpose + ";" +
+                                  "SELECT * FROM Sources WHERE pk_Sources=" + rows[2][jsonE].fk_Sources + ";" +
+                                  "SELECT fk_Biomolecules FROM Biomolecules_Sources_Association WHERE fk_Sources=" + rows[2][jsonE].fk_Sources + ";";
                     pool.query(querystring, function(err, rows, fields) {
                         if (err) {
                             throw err;
                         }
 
-                        biomarkerInfo['Papers'][jsonE]["Disease"] = rows[0][jsonE].Disease;
-                        biomarkerInfo['Papers'][jsonE]["Purpose"] = rows[1][jsonE].Purpose;
-                        biomarkerInfo['Papers'][jsonE]["Google ID"] = rows[2][jsonE].Google_ID;
-                        biomarkerInfo['Papers'][jsonE]["URL"] = rows[2][jsonE].URL;
+                        biomarkerInfo['Sources'][jsonE]["Disease"] = rows[0][jsonE].Disease;
+                        biomarkerInfo['Sources'][jsonE]["Purpose"] = rows[1][jsonE].Purpose;
+                        biomarkerInfo['Sources'][jsonE]["Google ID"] = rows[2][jsonE].Google_ID;
+                        biomarkerInfo['Sources'][jsonE]["URL"] = rows[2][jsonE].URL;
 
                         querystring = "SELECT Source_Type from Source_Type WHERE pk_Source_Type=" + rows[2][jsonE].fk_Source_Type + ";" +
-                                        "SELECT Original_Source_Database from Original_Source_Databases WHERE pk_Original_Source_Databases=" + rows[2][jsonE].fk_Original_Source_Databases + ";";
+                                      "SELECT Original_Source_Database from Original_Source_Databases WHERE pk_Original_Source_Databases=" + rows[2][jsonE].fk_Original_Source_Databases + ";";
                         //getting all other biomarkers associated w source
                         for(var i = 0; i < rows[3].length; i++)
                             querystring += "SELECT Name, fk_Biomolecules from Biomolecule_Names WHERE fk_Biomolecules=" + rows[3][i].fk_Biomolecules + " LIMIT 1 ;";
@@ -134,13 +133,13 @@ function getDossierInfo(biomarkerName, response, callback) {
                                 throw err;
                             }
 
-                            biomarkerInfo['Papers'][jsonE]["Source Type"] = rows[0][jsonE].Source_Type;
-                            biomarkerInfo['Papers'][jsonE]["Original Source Database"] = rows[1][jsonE].Original_Source_Database;
+                            biomarkerInfo['Sources'][jsonE]["Source Type"] = rows[0][jsonE].Source_Type;
+                            biomarkerInfo['Sources'][jsonE]["Original Source Database"] = rows[1][jsonE].Original_Source_Database;
 
                             //adding all other biomarkers associated w paper, excluding current one
                             for(var i = 2; i < rows.length; i++) {
-                                if(biomarkerInfo["Biomarker MySQL ID"] != rows[i][0].fk_Biomolecules)
-                                    biomarkerInfo['Papers'][jsonE]["Other Biomarkers"].push(rows[i][0].Name);
+                                if(biomarkerInfo["Biomolecule MySQL ID"] != rows[i][0].fk_Biomolecules)
+                                    biomarkerInfo['Sources'][jsonE]["Other Biomarkers"].push(rows[i][0].Name);
                             }
 
                             //send info to server.js to display to view - put here because this is the longer query cascade
@@ -150,7 +149,7 @@ function getDossierInfo(biomarkerName, response, callback) {
                 }
 
                 querystring = "SELECT Medium from Biomolecule_Medium WHERE pk_Biomolecule_Medium=" + rows[0][0].fk_Biomolecule_Medium + ";" +
-                                "SELECT Type from Biomolecule_Type WHERE pk_Biomolecule_Type=" + rows[0][0].fk_Biomolecule_Type + ";";
+                              "SELECT Type from Biomolecule_Type WHERE pk_Biomolecule_Type=" + rows[0][0].fk_Biomolecule_Type + ";";
                 pool.query(querystring, function(err, rows, fields) {
                     if (err) {
                         throw err;
@@ -164,5 +163,35 @@ function getDossierInfo(biomarkerName, response, callback) {
     });
 }
 
+function getSQLDate() {
+    var currentDayTwoDigits = new Date().getMonth() + 1;
+    if (currentDayTwoDigits < 10)
+        currentDayTwoDigits = "0" + currentDayTwoDigits.toString();
+    var currentDate = new Date().getFullYear().toString() + "-" + currentDayTwoDigits + "-" + new Date().getDate().toString();
+    return currentDate;
+}
+
+function createUnverifiedAccount(accountInfo, response, callback) {
+    var success = true;
+
+    querystring = "SELECT * FROM Users WHERE email=?;";
+    pool.query(querystring, [accountInfo.email], function(err, rows, fields) {
+        if(typeof rows != "undefined" && rows != null && rows.length > 0) {
+            response.render('pages/signup', {
+                create_account_problem_text: "An account with the entered email already exists. Please try again."
+            });
+        }
+        else {
+
+            querystring = "INSERT INTO Users (firstName, lastName, email, pass, date_signed_up, hash, verified) " +
+                          "VALUES (?, ?, ?, ?, ?, ?, false);";
+            pool.query(querystring, [accountInfo.firstName, accountInfo.lastName, accountInfo.email, accountInfo.pass, this.getSQLDate(), md5(accountInfo.lastName + accountInfo.email)], function(err, rows, fields) {
+                    callback(); //created to success, success view on server.js
+            });
+        }   
+    });
+}
+
 module.exports.getHomepageNumbers = getHomepageNumbers;
 module.exports.getDossierInfo = getDossierInfo;
+module.exports.createUnverifiedAccount = createUnverifiedAccount;
