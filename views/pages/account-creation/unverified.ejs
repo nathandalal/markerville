@@ -20,8 +20,13 @@
                 <p>
                     Your account under the email
                     <strong><%= email %></strong>
-                    was successfully created.
+                    is unverified.
                 </p>
+                <% if(sendingVerificationEmail) { %>
+                <p>
+                    Please verify your account by clicking on the link sent to your email, which should arrive shortly.
+                </p>
+                <% } %>
             </section>
         </div>
 

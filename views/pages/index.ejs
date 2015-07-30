@@ -24,8 +24,8 @@
                     </div>
                 <% } %>
                 <form id="main_search_bar" method="get">
-                    <span id="search_bar_spacing">
-                        <input type="search" id="search_bar" name="biomarker" placeholder="Search..." required>
+                    <span>
+                        <input type="search" id="search_bar" name="biomarker" placeholder="Enter a biomarker..." required>
                     </span>
                     <input type="button" id="search_button" value="Search">
                 </form>
@@ -44,6 +44,11 @@
                     <img id="disease_attribute_img"
                     src="images/diseases_attribute.png" alt="Diseases">
                     <h3><%= num_diseases %> Diseases</h3>
+                </li>
+                <li class="attribute">
+                    <img id="users_attribute_img"
+                    src="images/users_attribute.png" alt="Users">
+                    <h3><%= num_users %> Users</h3>
                 </li>
             </ul>
         </div>

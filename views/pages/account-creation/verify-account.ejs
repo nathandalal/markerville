@@ -17,14 +17,21 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-                <p>
-                    Your account under the email
-                    <strong><%= email %></strong>
-                    is unverified.
-                </p>
-                <p>
-                    Please verify your account by clicking on the link sent to your email, which should arrive shortly.
-                </p>
+                <% if(typeof create_account_problem_text!='undefined' && create_account_problem_text!=undefined) { %>
+                    <p>
+                        <br><%= create_account_problem_text %>
+                    </p>
+                <% } else { %>
+                    <p>
+                        Congratulations <strong><%= name %></strong>!
+                    </p>
+                    <p>
+                        Your account under the email
+                        <strong><%= email %></strong>
+                        was successfully verified. You
+                        can <a href = ./../login>log in</a> now.
+                    </p>
+                <% } %>
             </section>
         </div>
 

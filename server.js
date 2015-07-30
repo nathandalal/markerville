@@ -1,4 +1,5 @@
 var queries = require("./queries.js");
+var mailer = require("./mailer.js");
 
 var querystring = "";
 var port = 7777;
@@ -76,29 +77,29 @@ queries.getHomepageNumbers(function(homepageStats) {
     });
 
     //routing signup
-    app.get('/signup', function (request, response) {
-        response.render('pages/signup');
-        console.log('got a GET request from signup');
+    app.get('/account-creation/signup', function (request, response) {
+        response.render('pages/account-creation/signup');
+        console.log('got a GET request from account-creation/signup');
     });
-    app.post('/signup', function (request, response) {
-        console.log("got a signup POST request");
+    app.post('account-creation/signup', function (request, response) {
+        console.log("got a account-creation/signup POST request");
         if (request.body.user.pwd !== request.body.user.repeatpwd) {
-            response.render('pages/signup', {
+            response.render('pages/account-creation/signup', {
                 create_account_problem_text: "Passwords did not match. Please try again."
             });
         }
         else if (request.body.user.firstname.length == 0) {
-            response.render('pages/signup', {
+            response.render('pages/account-creation/signup', {
                 create_account_problem_text: "First Name is a required field and is left blank."
             });
         }
         else if (request.body.user.lastname.length == 0) {
-            response.render('pages/signup', {
+            response.render('pages/account-creation/signup', {
                 create_account_problem_text: "Last Name is a required field and is left blank."
             });
         }
         else if (request.body.user.pwd.length < 5) {
-            response.render('pages/signup', {
+            response.render('pages/account-creation/signup', {
                 create_account_problem_text: "Password must contain at least 5 characters. Please try again."
             });
         }
@@ -108,14 +109,30 @@ queries.getHomepageNumbers(function(homepageStats) {
                 lastName: request.body.user.lastname,
                 email: request.body.user.email,
                 pass: request.body.user.pwd
-            }, response, function(success) {
-                if(success) {
-                    response.render('pages/account_creation/unverified', {
-                        email: request.body.user.email
-                    });
-                }
+            }, response, function() {
+                response.render('pages/account-creation/unverified', {
+                    email: request.body.user.email,
+                    sendingVerificationEmail: true
+                });
+
+                mailer.sendVerificationEmail(accountInfo, function() {
+                    //do something after email is sent
+                });
             });
         }
+    });
+
+    //routing account-creation/verify-account (users come here from email message)
+    app.get("/account-creation/verify-account", function (request, response) {
+        console.log('got a GET request from account-creation/verify-account');
+
+        queries.verifyAccount({
+            email: request.query.email,
+            pass: request.query.pwd,
+            hash: request.query.hash,
+        }, response, function() { 
+            //do something??
+        });
     });
 
     // routing 404 event
