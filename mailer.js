@@ -10,7 +10,6 @@ var transporter = nodemailer.createTransport({
 function sendVerificationEmail(accountInfo, callback) {
 
     var encodedURIOptions = "email=" + encodeURIComponent(accountInfo.email) + 
-                            "&pwd=" + encodeURIComponent(accountInfo.pass) + 
                             "&hash=" + encodeURIComponent(accountInfo.hash);
 
     var mailOptions = {

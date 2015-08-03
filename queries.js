@@ -1,5 +1,6 @@
 var server = require("./server.js");
 var md5 = require('blueimp-md5').md5;
+var sha256 = require('sha256');
 var fs = require('fs'); //needed to read connection json file
 
 //msyql setup
@@ -177,12 +178,12 @@ function getDossierInfo(biomarkerName, response, callback) {
     });
 }
 
-function getSQLDate() {
+function getSQLDate(callback) {
     var currentDayTwoDigits = new Date().getMonth() + 1;
     if (currentDayTwoDigits < 10)
         currentDayTwoDigits = "0" + currentDayTwoDigits.toString();
-    var currentDate = new Date().getFullYear().toString() + "-" + currentDayTwoDigits + "-" + new Date().getDate().toString();
-    return currentDate;
+    currentDate = new Date().getFullYear().toString() + "-" + currentDayTwoDigits + "-" + new Date().getDate().toString();
+    callback(currentDate);
 }
 
 function createUnverifiedAccount(accountInfo, response, callback) {
@@ -202,12 +203,16 @@ function createUnverifiedAccount(accountInfo, response, callback) {
 
                 querystring = "INSERT INTO Users (firstName, lastName, email, pass, date_signed_up, hash, verified) " +
                               "VALUES (?, ?, ?, ?, ?, ?, false);";
-                connection.query(querystring, [accountInfo.firstName, accountInfo.lastName, accountInfo.email, accountInfo.pass, this.getSQLDate(), md5(accountInfo.lastName + accountInfo.email)], function(err, rows, fields) {
-                    if (err) {
-                        throw err;
-                    }
+                getSQLDate(function(currentDate) {
+                    accountInfo.date = currentDate;
+                    accountInfo.hash = md5(accountInfo.lastName + accountInfo.email);
+                    connection.query(querystring, [accountInfo.firstName, accountInfo.lastName, accountInfo.email, sha256(accountInfo.email + accountInfo.pass), accountInfo.date, accountInfo.hash], function(err, rows, fields) {
+                        if (err) {
+                            throw err;
+                        }
 
-                    callback(); //created to success, success view on server.js
+                        callback(); //created to success, success view on server.js
+                    });
                 });
             }   
         });
@@ -222,21 +227,14 @@ function verifyAccount(accountInfo, response, callback) {
 
         var validFields = true;
 
-        if (accountInfo.email == undefined && validFields) {
+        if (accountInfo.email == undefined) {
             validFields = false;
             response.render("pages/account-creation/verify-account", {
                 create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
             });
             callback();
         }
-        if (accountInfo.pass == undefined && validFields) {
-            validFields = false;
-            response.render("pages/account-creation/verify-account", {
-                create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
-            });
-            callback();
-        }
-        if (accountInfo.hash == undefined && validFields) {
+        if (accountInfo.hash == undefined) {
             validFields = false;
             response.render("pages/account-creation/verify-account", {
                 create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
@@ -246,8 +244,8 @@ function verifyAccount(accountInfo, response, callback) {
 
         if(validFields)
         {
-            querystring = "SELECT * FROM Users WHERE email=? AND pass=? AND hash=?;";
-            connection.query(querystring, [accountInfo.email, accountInfo.pass, accountInfo.hash], function(err, rows, fields) {
+            querystring = "SELECT * FROM Users WHERE email=? AND hash=?;";
+            connection.query(querystring, [accountInfo.email, accountInfo.hash], function(err, rows, fields) {
                 if (err) {
                     throw err;
                 }
@@ -278,6 +276,36 @@ function verifyAccount(accountInfo, response, callback) {
     });
 }
 
+function loginUser(accountInfo, response, callback) {
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+        querystring = "SELECT * FROM Users WHERE email=? AND pass=?;";
+        connection.query(querystring, [accountInfo.email, sha256(accountInfo.email + accountInfo.pass)], function(err, rows, fields) {
+            if (err) {
+                throw err;
+            }
+
+            if(!(typeof rows != "undefined" && rows != null && rows.length > 0)) {
+                response.render('pages/login', {
+                    login_problem_text: "Invalid login. Please try again."
+                });
+            }
+            else if(rows[0].verified == 0) {
+                response.render('pages/account-creation/unverified', {
+                    email: accountInfo.email,
+                    sendingVerificationEmail: false
+                }); 
+            }
+            else {
+                callback();
+            }
+        });
+    });
+}
+
+module.exports.loginUser = loginUser;
 module.exports.getHomepageNumbers = getHomepageNumbers;
 module.exports.getDossierInfo = getDossierInfo;
 module.exports.createUnverifiedAccount = createUnverifiedAccount;

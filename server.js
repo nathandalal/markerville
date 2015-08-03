@@ -3,8 +3,6 @@ var mailer = require("./mailer.js");
 
 var querystring = "";
 var port = 7777;
-var fs = require('fs');
-var md5 = require('blueimp-md5').md5;
 
 //express setup
 var express = require('express');
@@ -62,26 +60,22 @@ queries.getHomepageNumbers(function(homepageStats) {
     });
     app.post('/login', function (request, response) {
         console.log("got a login POST request");
-        if (true) {
-            response.render('pages/login', {
-                login_problem_text: "Account not found. Please try again."
-            });
-        }
-        else {
-            response.render('pages/index', {
-                num_biomarkers: homepageStats.NUM_BIOMARKERS_SERVER,
-                num_diseases: homepageStats.NUM_DISEASES_SERVER,
-                num_users: homepageStats.NUM_USERS_SERVER
-            });
-        }
+
+        queries.loginUser({
+            email: request.body.user.email,
+            pass: request.body.user.pwd
+        }, response, function() {
+            //do something, set a cookie, whatever
+            response.redirect("../"); //redirect to index
+        });
     });
 
     //routing signup
-    app.get('/account-creation/signup', function (request, response) {
+    app.get('/signup', function (request, response) {
         response.render('pages/account-creation/signup');
         console.log('got a GET request from account-creation/signup');
     });
-    app.post('account-creation/signup', function (request, response) {
+    app.post('/signup', function (request, response) {
         console.log("got a account-creation/signup POST request");
         if (request.body.user.pwd !== request.body.user.repeatpwd) {
             response.render('pages/account-creation/signup', {
@@ -104,12 +98,14 @@ queries.getHomepageNumbers(function(homepageStats) {
             });
         }
         else {
-            queries.createUnverifiedAccount({
+            accountInfo = {
                 firstName: request.body.user.firstname,
                 lastName: request.body.user.lastname,
                 email: request.body.user.email,
                 pass: request.body.user.pwd
-            }, response, function() {
+            }
+
+            queries.createUnverifiedAccount(accountInfo, response, function() {
                 response.render('pages/account-creation/unverified', {
                     email: request.body.user.email,
                     sendingVerificationEmail: true
@@ -128,8 +124,7 @@ queries.getHomepageNumbers(function(homepageStats) {
 
         queries.verifyAccount({
             email: request.query.email,
-            pass: request.query.pwd,
-            hash: request.query.hash,
+            hash: request.query.hash
         }, response, function() { 
             //do something??
         });
