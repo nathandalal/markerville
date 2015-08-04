@@ -32,7 +32,7 @@
                     <input type="submit" id="submit_button" value="Log In">
                     <br><br>
                 </form>
-                <span><small>By logging in, you agree to using cookies.<small></span>
+                <span><small>By logging in, you agree to using cookies.</small></span>
             </section>
         </div>
 
@@ -47,6 +47,10 @@
 
 </body>
 
+<% if(logged_in) { %>
+<% include ../partials/navbar_loggedin %>
+<% } else { %>
 <% include ../partials/navbar %>
+<% } %>
 
 </html>

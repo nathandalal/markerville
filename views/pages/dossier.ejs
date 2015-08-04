@@ -70,6 +70,10 @@
 
 </body>
 
+<% if(logged_in) { %>
+<% include ../partials/navbar_loggedin %>
+<% } else { %>
 <% include ../partials/navbar %>
+<% } %>
 
 </html>

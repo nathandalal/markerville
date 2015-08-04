@@ -196,7 +196,8 @@ function createUnverifiedAccount(accountInfo, response, callback) {
         connection.query(querystring, [accountInfo.email], function(err, rows, fields) {
             if(typeof rows != "undefined" && rows != null && rows.length > 0) {
                 response.render('pages/account-creation/signup', {
-                    create_account_problem_text: "An account with the entered email already exists. Please try again."
+                    create_account_problem_text: "An account with the entered email already exists. Please try again.",
+                    logged_in: false
                 });
             }
             else {
@@ -210,7 +211,7 @@ function createUnverifiedAccount(accountInfo, response, callback) {
                         if (err) {
                             throw err;
                         }
-
+                        console.log("user with email " + accountInfo.email + " created unverified account.");
                         callback(); //created to success, success view on server.js
                     });
                 });
@@ -230,14 +231,16 @@ function verifyAccount(accountInfo, response, callback) {
         if (accountInfo.email == undefined) {
             validFields = false;
             response.render("pages/account-creation/verify-account", {
-                create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
+                create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation.",
+                logged_in: false
             });
             callback();
         }
         if (accountInfo.hash == undefined) {
             validFields = false;
             response.render("pages/account-creation/verify-account", {
-                create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
+                create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation.",
+                logged_in: false
             });
             callback();
         }
@@ -252,7 +255,8 @@ function verifyAccount(accountInfo, response, callback) {
 
                 if(!(typeof rows != "undefined" && rows != null && rows.length > 0)) {
                     response.render("pages/account-creation/verify-account", {
-                        create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation."
+                        create_account_problem_text: "Whoops, something went wrong. Sorry! Please contact us with details about your account creation.",
+                        logged_in: false
                     });
                 }
                 else {
@@ -265,7 +269,8 @@ function verifyAccount(accountInfo, response, callback) {
                         }
                         response.render("pages/account-creation/verify-account", {
                             name: accountInfo.name,
-                            email: accountInfo.email
+                            email: accountInfo.email,
+                            logged_in: false
                         }); //success
                         console.log("account with email " + accountInfo.email + " verified");
                     });
@@ -289,13 +294,15 @@ function loginUser(accountInfo, response, callback) {
 
             if(!(typeof rows != "undefined" && rows != null && rows.length > 0)) {
                 response.render('pages/login', {
-                    login_problem_text: "Invalid login. Please try again."
+                    login_problem_text: "Invalid login. Please try again.",
+                    logged_in: false
                 });
             }
             else if(rows[0].verified == 0) {
                 response.render('pages/account-creation/unverified', {
                     email: accountInfo.email,
-                    sendingVerificationEmail: false
+                    sendingVerificationEmail: false,
+                    logged_in: false
                 }); 
             }
             else {
