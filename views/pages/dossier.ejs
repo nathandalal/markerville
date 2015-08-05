@@ -41,12 +41,78 @@
                                 <% }); %>
                             </ul>
 
+
+
                             <br>
                         </section>
-                        <section id="item2" class="ac_hidden">
-                            <p class="pointer">&#9654;</p><h1><a href="#">Referenced Papers</a></h1>
-                            <p><p>Coming Soon... </p></p>
-                        </section>
+
+                        <section id="item3" class="ac_hidden">
+                        <p class="pointer">&#9654;</p><h1><a href="#">Source Information</a></h1>
+                        <p class="dossier_label">Biomolecule State:&nbsp;&nbsp;</p>
+                        <%= biomarkerInfo['Sources'][0]['Biomolecule State'] %> 
+                        <br><br>
+                        
+
+                        <% if (biomarkerInfo['Sources'][0]['Drug Name'] !== null) { %>
+                                    <p class="dossier_label">Drug Name:&nbsp;&nbsp;</p>
+                                    <%= biomarkerInfo['Sources'][0]['Drug Name'] %>
+                                    <br><br>
+                        <% } %>
+
+                        
+                        <p class="dossier_label">Disease:&nbsp;&nbsp;</p>
+                        <%= biomarkerInfo['Sources'][0]['Disease'] %> 
+                        <br><br>
+
+                        <p class="dossier_label">Purpose:&nbsp;&nbsp;</p>
+                        <%= biomarkerInfo['Sources'][0]['Purpose'] %> 
+                        <br><br>
+
+                        <% if (biomarkerInfo['Sources'][0]['Other Biomarkers'] !== null && biomarkerInfo['Sources'][0]['Other Biomarkers'].length > 0) { %>
+                                    <p class="dossier_label">Other Referenced Biomarkers:&nbsp;&nbsp;</p>
+                                    <%= biomarkerInfo['Sources'][0]['Other Biomarkers'] %>
+                                    <%= " " %>
+                                    <br><br>
+                        <% } %>
+
+                        <p class="dossier_label">Trials:&nbsp;&nbsp;</p>
+                        <blockquote>
+                        <div class="CSSTableGenerator">
+                        <table>
+                            <TR>
+                                <td> Method of Discovery </td>
+                                <% if (biomarkerInfo['Sources'][0]['Trials'][0]['# Patients'] !== null) { %>
+                                        <td> # of Patients </td>
+                                <% } %>
+                            </TR>
+                            <TR>
+                                <TD> <%= biomarkerInfo['Sources'][0]['Trials'][0]['Discovery Method'] %> </TD>
+                                 <% if (biomarkerInfo['Sources'][0]['Trials'][0]['# Patients'] !== null) { %>
+                                        <TD> <%= biomarkerInfo['Sources'][0]['Trials'][0]['# Patients'] %> </TD>
+                                <% } %>
+                            </TR>
+                        </table>
+                    </div>
+                    </blockquote>
+
+                        
+                        
+
+                        <p class="dossier_label">ID:&nbsp;&nbsp;</p>
+                        <a href='<%= biomarkerInfo['Sources'][0]['URL'] %>' target = "blank">
+                            <%= biomarkerInfo['Sources'][0]['Google ID'] %>
+                        </a>
+                        <br><br>
+
+                        <p class="dossier_label">Source Type:&nbsp;&nbsp;</p>
+                        <%= biomarkerInfo['Sources'][0]['Source Type'] %> 
+                        <br><br>
+
+                        <p class="dossier_label">Original Source Database:&nbsp;&nbsp;</p>
+                        <%= biomarkerInfo['Sources'][0]['Original Source Database'] %> 
+                        <br><br>
+                    
+
                         <section id="item3" class="ac_hidden">
                             <p class="pointer">&#9654;</p><h1><a href="#">Contributors</a></h1>
                             <p>Nathan Dalal </p>
