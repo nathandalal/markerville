@@ -278,6 +278,7 @@ h1 {
 #accordion section {
     overflow:hidden;
     border:1px #333 solid;
+    border-radius: 10px 0px 10px 0px;
 }
 #accordion p {
     color:black;
@@ -315,3 +316,32 @@ h1 {
 #accordion section ul {
     margin-left: 25px;
 }
+
+.small_button {
+    padding: 6px 10px 6px 10px;
+    border: 2px solid #F0391B;
+    background-color: #F0391B;
+    color: #fafafa;
+    font: 'PT Sans';
+}
+.small_button:hover,
+.small_button:focus  {
+    background-color:#fafafa;
+    color:#F0391B;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"]
+ { 
+    border-color:#cccccc;
+    border-style:solid; 
+    padding:6px; 
+    font-size:12px; 
+    border-width:3px; 
+    border-radius:8px; 
+    background-color:#e6e6ff;  
+} 
+input[type="text"]:focus { 
+    outline:none; 
+} 

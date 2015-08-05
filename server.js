@@ -29,6 +29,7 @@ queries.getHomepageNumbers(function(homepageStats) {
     //routing index
     app.get('/', function (request, response) {
         console.log('got a GET request from index');
+        var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
 
         var biomarkerName = request.query['biomarker'];
         if (biomarkerName == undefined) {
@@ -37,17 +38,17 @@ queries.getHomepageNumbers(function(homepageStats) {
                 num_biomarkers: homepageStats.NUM_BIOMARKERS_SERVER,
                 num_diseases: homepageStats.NUM_DISEASES_SERVER,
                 num_users: homepageStats.NUM_USERS_SERVER,
-                logged_in: typeof request.cookies.email !='undefined' && request.cookies.email !=undefined,
+                logged_in: loggedIn,
                 email: request.cookies.email
             });
         }
         else {
-            queries.getDossierInfo(biomarkerName, response, function(biomarkerInfo) {
+            queries.getDossierInfo(loggedIn, request.cookies.email, biomarkerName, response, function(biomarkerInfo) {
                 console.log("search returned:");
                 console.log(biomarkerInfo);
                 response.render('pages/dossier', {
                     biomarkerInfo: biomarkerInfo,
-                    logged_in: typeof request.cookies.email !='undefined' && request.cookies.email !=undefined,
+                    logged_in: loggedIn,
                     email: request.cookies.email
                 });
             });
@@ -55,49 +56,47 @@ queries.getHomepageNumbers(function(homepageStats) {
     });
     
     //routing editor mode
-    app.get('/edit', function (request, response) {
+    app.get('/contribute', function (request, response) {
         console.log('got a GET request from edit');
-
-        var biomarkerName = request.query['biomarker'];
-        if (biomarkerName == undefined) {
-            response.render('pages/index', {
-                search_failed: false,
-                num_biomarkers: homepageStats.NUM_BIOMARKERS_SERVER,
-                num_diseases: homepageStats.NUM_DISEASES_SERVER,
-                num_users: homepageStats.NUM_USERS_SERVER,
-                logged_in: typeof request.cookies.email !='undefined' && request.cookies.email !=undefined,
-                email: request.cookies.email
+        var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
+        if (!loggedIn) {
+            response.render('pages/already_logout', {
+                logged_in: false
             });
-        }
-        else {
-            queries.getDossierInfo(biomarkerName, response, function(biomarkerInfo) {
-                console.log("search returned:");
-                console.log(biomarkerInfo);
-                response.render('pages/dossier', {
-                    biomarkerInfo: biomarkerInfo,
-                    logged_in: typeof request.cookies.email !='undefined' && request.cookies.email !=undefined,
-                    email: request.cookies.email
-                });
+        } else {
+            response.render('pages/edit-main', {
+                logged_in: true,
+                email: request.cookies.email
             });
         }
     });
 
     //routing about
     app.get("/about", function (request, response) {
+        console.log('got a GET request from about');
         response.render('pages/about', {
             logged_in: (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined),
             email: request.cookies.email
         });
-        console.log('got a GET request from about');
     });
 
     //routing account-info
     app.get("/account-info", function (request, response) {
-        response.render('pages/account-info', {
-            logged_in: (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined),
-            email: request.cookies.email
-        });
         console.log('got a GET request from account-info');
+        var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
+        if (loggedIn) {
+            queries.getAccountInfo(request.cookies.email, function(accountInfo) {
+                response.render('pages/account-info', {
+                    accountInfo: accountInfo,
+                    logged_in: true,
+                    email: request.cookies.email
+                });
+            })
+        } else {
+            response.render('pages/already_logout', {
+                logged_in: false
+            });
+        }
     });
 
     //routing login
@@ -106,8 +105,7 @@ queries.getHomepageNumbers(function(homepageStats) {
         var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
         if(!loggedIn) {
             response.render('pages/login', {
-                logged_in: false,
-                email: request.cookies.email
+                logged_in: false
             });
         } else {
             response.render('pages/already_login', {

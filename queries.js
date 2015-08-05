@@ -36,7 +36,7 @@ function getHomepageNumbers(callback) {
 }
 
 
-function getDossierInfo(biomarkerName, response, callback) {
+function getDossierInfo(loggedIn, emailIfLoggedIn, biomarkerName, response, callback) {
     var querystring = "";
     var biomarkerInfo = {
         Name: biomarkerName
@@ -59,7 +59,9 @@ function getDossierInfo(biomarkerName, response, callback) {
                     biomarkerName: biomarkerName,
                     num_biomarkers: server.homepageStats.NUM_BIOMARKERS_SERVER,
                     num_diseases: server.homepageStats.NUM_DISEASES_SERVER,
-                    num_users: server.homepageStats.NUM_USERS_SERVER
+                    num_users: server.homepageStats.NUM_USERS_SERVER,
+                    logged_in: loggedIn,
+                    email: emailIfLoggedIn
                 });
             }
             else {
@@ -312,8 +314,29 @@ function loginUser(accountInfo, response, callback) {
     });
 }
 
+function getAccountInfo(email, callback) {
+    var accountInfo = {};
+    accountInfo.email = email;
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+        querystring = "SELECT * FROM Users WHERE email=?;";
+        connection.query(querystring, [accountInfo.email], function(err, rows, fields) {
+            accountInfo.firstName = rows[0].firstName;
+            accountInfo.lastName = rows[0].lastName;
+            callback(accountInfo);
+        });
+    });
+}
+
+function addNewBiomarker(biomarkerInfo, callback) {
+    
+}
+
 module.exports.loginUser = loginUser;
 module.exports.getHomepageNumbers = getHomepageNumbers;
 module.exports.getDossierInfo = getDossierInfo;
 module.exports.createUnverifiedAccount = createUnverifiedAccount;
 module.exports.verifyAccount = verifyAccount;
+module.exports.getAccountInfo = getAccountInfo;
