@@ -2,3 +2,6 @@
     <img class="logo" src="/images/markerville_logo.png" alt="Markerville (Home)" height="64" width="174">
 </a>
 <a class="to_nav" href="#menubar" style="font-size: 20px;">&#9776;</a>
+<% if(logged_in) { %>
+<p><small>Logged in as <strong><%= email %></strong>.</small></p>
+<% } %>

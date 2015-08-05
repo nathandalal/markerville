@@ -17,11 +17,17 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
+                <% if(typeof optional_text!='undefined' && optional_text!=undefined) { %>
+                    <span>
+                        <%= optional_text %><br>
+                    </span>
+                <% } %>
+                <br>
                 <% if(search_failed) { %>
-                    <div style="text-align: center;">
+                    <p style="text-align: center;">
                         <strong><%= biomarkerName %></strong>
                         could not be found in the Markerville database.<br><br>
-                    </div>
+                    </p>
                 <% } %>
                 <form id="main_search_bar" method="get">
                     <span>
@@ -64,6 +70,10 @@
 
 </body>
 
+<% if(logged_in) { %>
+<% include ../partials/navbar_loggedin %>
+<% } else { %>
 <% include ../partials/navbar %>
+<% } %>
 
 </html>

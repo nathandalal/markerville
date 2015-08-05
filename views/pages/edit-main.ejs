@@ -17,12 +17,16 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-                <p>
-                    Developed by Nathan Dalal and Mythri Ambatipudi at the 
-                    Canary Center Summer Internship Program.
-                </p>
-                <p>Advised by Justin Carden and Dr. Parag Mallick, Ph.D.</p>
-                <p>Built with Node.js, ExpressJS, MySQL, and love.</p>
+                <div>Add a new biomarker to Markerville!<br><br></div>
+                <div id="biomarker_editing_section">
+                    <form id="editing-ux" method="post">
+                        <span style="font-weight: bold;">Primary Name: &nbsp;</span>
+                        <span id="name_inputs"><input type="text" required>&nbsp;</span>
+                        <input class="small_button" type="button" onclick="appendName('name_inputs');" value="+">
+                        <br><small>Quick Tip: Adding more names allows users to search for this biomarker more easily.</small>
+                        <br><br>
+                    </form>
+                </div>
             </section>
         </div>
 
