@@ -6,7 +6,7 @@ function appendName(li_element_id) {
     headerspan.innerHTML = "<br>Another Name: &nbsp;&nbsp;";
 
     var newspan = document.createElement('span');
-    newspan.innerHTML = "<input type='text' name='biomarkerNames[]'>&nbsp;";
+    newspan.innerHTML = "<input type='text' name='biomoleculeNames[]'>&nbsp;";
 
     var buttons_span = document.createElement('span');
     buttons_span.innerHTML = "<input class='small_button' type='button' " + 

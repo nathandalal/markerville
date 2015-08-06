@@ -334,7 +334,8 @@ h1 {
 
 input[type="text"],
 input[type="email"],
-input[type="password"]
+input[type="password"],
+select
  { 
     border-color:#cccccc;
     border-style:solid; 
@@ -344,7 +345,10 @@ input[type="password"]
     border-radius:8px; 
     background-color:#e6e6ff;  
 } 
-input[type="text"]:focus { 
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+select:focus { 
     outline:none; 
 }
 
@@ -379,4 +383,9 @@ div .dossier_source_header {
     margin: 0 auto;
     display: table;
     width: 90%;
+}
+
+.editing_header {
+    text-decoration: underline;
+    font-weight: bold;
 }
