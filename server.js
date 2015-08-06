@@ -70,6 +70,17 @@ queries.getHomepageNumbers(function(homepageStats) {
             });
         }
     });
+    app.post('contribute', function (request, response) {
+        console.log('got a contribute POST request');
+        var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
+        if (!loggedIn) {
+            response.render('pages/already_logout', {
+                logged_in: false
+            });
+        } else {
+            console.log(request.body);
+        }
+    });
 
     //routing about
     app.get("/about", function (request, response) {
