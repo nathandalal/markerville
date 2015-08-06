@@ -18,15 +18,27 @@
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
                 <div>Add a new biomarker to Markerville!<br><br></div>
-                <div id="biomarker_editing_section">
-                    <form id="editing-ux" method="post">
-                        <span style="font-weight: bold;">Primary Name: &nbsp;</span>
-                        <span id="name_inputs"><input type="text" required>&nbsp;</span>
-                        <input class="small_button" type="button" onclick="appendName('name_inputs');" value="+">
-                        <br><small>Quick Tip: Adding more names allows users to search for this biomarker more easily.</small>
-                        <br><br>
-                    </form>
-                </div>
+                <form id="editing-ux" method="post">
+                    <div id="biomarker_editing_section">
+                        <span style="text-decoration: underline; font-weight: bold;">Biomarker Names<br><br></span>
+                        <ul id="name_editing_section" class="editing_lists">
+                            <li id="name_inputs">
+                                <span style="font-weight: bold;">Primary Name: &nbsp;</span>
+                                <span><input type="text" name="biomarkerNames[]" required></span>
+                                <span>
+                                    <input class="small_button" type="button" onclick="appendName('name_inputs');" value="+">
+                                </span>
+                            </li>
+                            <br><small>Quick Tip: Adding more names allows users to search for this biomarker more easily.</small>
+                            <br><br>
+                        </ul>
+                    </div>
+                    <div id="submit_editing_section">
+                        <span id="alternate-submit-button-text">A button will appear to submit the biomarker to Markerville when all fields are completed.<br><br></span>
+                        <span id="editing-submit-button"><input type="submit" id="submit_button" value="Add Biomarker"><br><br></span>
+                    </div>
+                </form>
+                <script type="text/javascript">hideSubmit();</script> <!-- HIDE SUBMIT BUTTON AT STARTUP -->
             </section>
         </div>
 

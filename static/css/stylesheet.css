@@ -255,10 +255,10 @@ h1 {
 }
 
 #accordion section, #accordion .pointer, #accordion h1, #accordion p {
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -ms-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 #accordion {
     margin-bottom:30px;
@@ -267,7 +267,7 @@ h1 {
 #accordion h1 {
     line-height:1.2;
     font-size:20px;
-    background-color: rgba(8, 81, 32, 0.6);
+    background-color: rgba(31, 92, 153, 0.6);
     margin:0;
     padding: 10px 10px 10px 30px;
 }
@@ -289,7 +289,7 @@ h1 {
 
 #accordion section.ac_hidden {
     height:44px;
-    background-color: rgba(71, 255, 100, 1);
+    background-color: rgba(31, 92, 153, 0.3);
 }
 #accordion .pointer {
     padding:0;
@@ -300,7 +300,7 @@ h1 {
     color:white;
 }
 #accordion section:not(.ac_hidden) h1 {
-    background-color: rgba(8, 81, 32, 1);
+    background-color: rgba(31, 92, 153, 1);
 }
 
 #accordion section:not(.ac_hidden) .pointer {
@@ -319,108 +319,6 @@ h1 {
     margin-left: 25px;
 }
 
-<<<<<<< HEAD
-.CSSTableGenerator {
-    margin:0px;
-    padding:0px;
-    width:24.3%;
-    box-shadow: 5px 5px 1px #888888;
-    border:3px solid #000000;
-    
-    -moz-border-radius-bottomleft:0px;
-    -webkit-border-bottom-left-radius:0px;
-    border-bottom-left-radius:0px;
-    
-    -moz-border-radius-bottomright:0px;
-    -webkit-border-bottom-right-radius:0px;
-    border-bottom-right-radius:0px;
-    
-    -moz-border-radius-topright:0px;
-    -webkit-border-top-right-radius:0px;
-    border-top-right-radius:0px;
-    
-    -moz-border-radius-topleft:0px;
-    -webkit-border-top-left-radius:0px;
-    border-top-left-radius:0px;
-}
-.CSSTableGenerator table{
-    border-collapse: collapse;
-    border-spacing: 0;
-    height:50%;
-    margin:0px;
-    padding:0px;
-}
-.CSSTableGenerator tr:last-child td:last-child {
-    -moz-border-radius-bottomright:0px;
-    -webkit-border-bottom-right-radius:0px;
-    border-bottom-right-radius:0px;
-}
-.CSSTableGenerator table tr:first-child td:first-child {
-    -moz-border-radius-topleft:0px;
-    -webkit-border-top-left-radius:0px;
-    border-top-left-radius:0px;
-}
-.CSSTableGenerator table tr:first-child td:last-child {
-    -moz-border-radius-topright:0px;
-    -webkit-border-top-right-radius:0px;
-    border-top-right-radius:0px;
-}.CSSTableGenerator tr:last-child td:first-child{
-    -moz-border-radius-bottomleft:0px;
-    -webkit-border-bottom-left-radius:0px;
-    border-bottom-left-radius:0px;
-}.CSSTableGenerator tr:hover td{
-    
-}
-.CSSTableGenerator tr:nth-child(odd){ background-color:#13ca02; }
-.CSSTableGenerator tr:nth-child(even)    { background-color:#ffffff; }.CSSTableGenerator td{
-    vertical-align:middle;
-    
-    
-    border:3px solid #000000;
-    border-width:0px 2px 2px 0px;
-    text-align:center;
-    padding:7px;
-    font-size:14px;
-    font-family:Arial;
-    font-weight:bold;
-    color:#000000;
-}.CSSTableGenerator tr:last-child td{
-    border-width:0px 2px 0px 0px;
-}.CSSTableGenerator tr td:last-child{
-    border-width:0px 0px 2px 0px;
-}.CSSTableGenerator tr:last-child td:last-child{
-    border-width:0px 0px 0px 0px;
-}
-.CSSTableGenerator tr:first-child td{
-    background:-o-linear-gradient(bottom, #085101 5%, #13ca02 100%);    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #085101), color-stop(1, #13ca02) );
-    background:-moz-linear-gradient( center top, #085101 5%, #13ca02 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#13ca02", endColorstr="#085101");  background: -o-linear-gradient(top,#085101,13ca02);
-
-    background-color:#085101;
-    border:3px solid #000000;
-    text-align:center;
-    border-width:0px 0px 2px 2px;
-    font-size:14px;
-    font-family:Arial;
-    font-weight:bold;
-    color:#ffffff;
-}
-.CSSTableGenerator tr:first-child:hover td{
-    background:-o-linear-gradient(bottom, #085101 5%, #13ca02 100%);    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #085101), color-stop(1, #13ca02) );
-    background:-moz-linear-gradient( center top, #085101 5%, #13ca02 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#13ca02", endColorstr="#085101");  background: -o-linear-gradient(top,#085101,13ca02);
-
-    background-color:#085101;
-}
-.CSSTableGenerator tr:first-child td:first-child{
-    border-width:0px 0px 2px 0px;
-}
-.CSSTableGenerator tr:first-child td:last-child{
-    border-width:0px 0px 2px 2px;
-}
-
-
-=======
 .small_button {
     padding: 6px 10px 6px 10px;
     border: 2px solid #F0391B;
@@ -448,5 +346,37 @@ input[type="password"]
 } 
 input[type="text"]:focus { 
     outline:none; 
-} 
->>>>>>> 0626fd03b68b5079655ef19d1cc80ed645ab4d56
+}
+
+.editing_lists li {
+    display: block;
+}
+
+#dossier_trials_table {
+    width: 50%;
+    border-collapse: collapse;
+}
+
+#dossier_trials_table td, #dossier_trials_table th {
+    font-size: 1;
+    border: 1px solid #F0391B;
+    padding: 3px 7px 2px 7px;
+}
+
+#dossier_trials_table th {
+    font-size: 1.4;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: rgba(240, 57, 27, 0.8);
+    color: #ffffff;
+}
+
+div .dossier_source_header {
+    font-size: 30px;
+    color: rgba(31, 92, 153, 1);
+    font-weight: bold;
+    margin: 0 auto;
+    display: table;
+    width: 90%;
+}
