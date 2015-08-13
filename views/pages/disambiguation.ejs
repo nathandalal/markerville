@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body id="top">
+
+    <div id="wrapper">
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <% include ../partials/header %>
+            </header>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer">
+            <section id="main_content" class="inner">
+                <p>
+                    We found <strong><%= numBiomarkers %></strong> biomarkers listed under the disease
+                    <span style="text-transform: uppercase; font-weight: bold;"><%= disease %></span>.
+                    Browse through the following names.
+                </p>
+                <ul class="disambiguation_list">
+                    <% for(var i=0; i<names.length; i++) { %>
+                        <li><a href="/?biomarker=<%= names[i] %>"><%= names[i] %></a></li>
+                    <% } %>
+                </ul>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <% include ../partials/footer %>
+            </footer>
+        </div>
+
+    </div><!-- END WRAPPER -->
+
+</body>
+
+<% if(logged_in) { %>
+<% include ../partials/navbar_loggedin %>
+<% } else { %>
+<% include ../partials/navbar %>
+<% } %>
+
+</html>

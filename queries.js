@@ -54,14 +54,17 @@ function getDossierInfo(loggedIn, emailIfLoggedIn, biomarkerName, response, call
             }
 
             if( !(typeof rows != "undefined" && rows != null && rows.length > 0) ) {
-                response.render('pages/index', {
-                    search_failed: true,
-                    biomarkerName: biomarkerName,
-                    num_biomarkers: server.homepageStats.NUM_BIOMARKERS_SERVER,
-                    num_diseases: server.homepageStats.NUM_DISEASES_SERVER,
-                    num_users: server.homepageStats.NUM_USERS_SERVER,
-                    logged_in: loggedIn,
-                    email: emailIfLoggedIn
+                //find all biomarkers in disease if search is a disease name
+                getDiseaseDisambiguation(loggedIn, emailIfLoggedIn, biomarkerName, response, function() {
+                    response.render('pages/index', {
+                        search_failed: true,
+                        biomarkerName: biomarkerName,
+                        num_biomarkers: server.homepageStats.NUM_BIOMARKERS_SERVER,
+                        num_diseases: server.homepageStats.NUM_DISEASES_SERVER,
+                        num_users: server.homepageStats.NUM_USERS_SERVER,
+                        logged_in: loggedIn,
+                        email: emailIfLoggedIn
+                    });
                 });
             }
             else {
@@ -321,7 +324,7 @@ function getAccountInfo(email, callback) {
         if(err) {
             throw err;
         }
-        querystring = "SELECT * FROM Users WHERE email=?;";
+        var querystring = "SELECT * FROM Users WHERE email=?;";
         connection.query(querystring, [accountInfo.email], function(err, rows, fields) {
             accountInfo.firstName = rows[0].firstName;
             accountInfo.lastName = rows[0].lastName;
@@ -330,8 +333,211 @@ function getAccountInfo(email, callback) {
     });
 }
 
-function addNewBiomarker(biomarkerInfo, callback) {
-    
+function getEditingInfo(callback) {
+    var editingInfo = {
+        biomoleculeMediumList: [],
+        biomoleculeTypeList: [],
+        sourceTypeList: [],
+        sourceOriginalDatabaseList: [],
+        sourcePurposeList: [],
+        sourceDiseaseList: [],
+        sourceDiscoveryMethodList: []
+    };
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+        var querystring = "SELECT Medium FROM Biomolecule_Medium;" +
+                        "SELECT Type FROM Biomolecule_Type;" +
+                        "SELECT Source_Type FROM Source_Type;" +
+                        "SELECT Original_Source_Database FROM Original_Source_Databases;" +
+                        "SELECT Purpose FROM Biomarker_Purpose;" +
+                        "SELECT Disease FROM Diseases;" +
+                        "SELECT Discovery_Method from Discovery_Method;";
+        connection.query(querystring, function(err, rows, fields) {
+            if (err) {
+                throw err;
+            }
+
+            for(var i=0; i<rows[0].length; i++) {
+                editingInfo.biomoleculeMediumList.push(rows[0][i].Medium);
+            }
+            for(var i=0; i<rows[1].length; i++) {
+                editingInfo.biomoleculeTypeList.push(rows[1][i].Type);
+            }
+            for(var i=0; i<rows[2].length; i++) {
+                editingInfo.sourceTypeList.push(rows[2][i].Source_Type);
+            }
+            for(var i=0; i<rows[3].length; i++) {
+                editingInfo.sourceOriginalDatabaseList.push(rows[3][i].Original_Source_Database);
+            }
+            for(var i=0; i<rows[4].length; i++) {
+                editingInfo.sourcePurposeList.push(rows[4][i].Purpose);
+            }
+            for(var i=0; i<rows[5].length; i++) {
+                editingInfo.sourceDiseaseList.push(rows[5][i].Disease);
+            }
+            for(var i=0; i<rows[6].length; i++) {
+                editingInfo.sourceDiscoveryMethodList.push(rows[6][i].Discovery_Method);
+            }
+
+            callback(editingInfo);
+        });
+    });
+}
+
+function checkIfBiomarkerExists(biomoleculeNames, callback) {
+    var failed = false;
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+
+        for(var i=0; i<biomarkerInfo.biomoleculeNames.length; i++) {
+            var querystring = "SELECT Name FROM Biomolecule_Names WHERE Name=?;";
+            connection.query(querystring, [biomarkerInfo.biomoleculeNames[i]], function(err, rows, fields) {
+                if(err) {
+                    throw err;
+                }
+                
+                if(typeof rows != "undefined" && rows != null && rows.length > 0) {
+                    response.render("pages/found-biomarker-while-editing", {
+                        biomarkerName: rows[0].Name,
+                        logged_in: loggedIn,
+                        email: emailIfLoggedIn
+                    });//response.render
+                    failed = true;
+                    callback(failed);
+                    return;
+                }
+            });
+            console.log(i);
+        }
+    });
+}
+
+function addNewBiomarker(loggedIn, emailIfLoggedIn, biomarkerInfo, response, callback) {
+    var foundArray = buildFoundArray(biomarkerInfo);
+    var yesOrNo = checkFoundArray(foundArray);
+    doSomething(yesOrNo);
+}
+
+function buildFoundArray(biomarkerInfo) {
+    var foundArray = [];
+    //  confirming connection to DB
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+
+        // comparing query string against DB entries
+        for(var i=0; i<biomarkerInfo.biomoleculeNames.length; i++) {
+            var querystring = "SELECT Name FROM Biomolecule_Names WHERE Name=?;";
+            connection.query(querystring, [biomarkerInfo.biomoleculeNames[i]], function(err, rows, fields) {
+                if(err) {
+                    throw err;
+                }
+                // check entry against constraints
+                if(typeof rows != "undefined" && rows != null && rows.length > 0) {
+                    // if constraints are met set Found := TRUE
+                    foundArray.push(true);
+                }
+                else {
+                    foundArray.push(false);
+                }
+                // log each row check
+            });//end 1 query
+        }//end loop
+        console.log(foundArray);
+        return foundArray;
+    });
+}
+
+function checkFoundArray(foundArray) {
+    console.log(foundArray);
+    for(var i=0; i<foundArray.length; i++) {
+        if(foundArray[i])
+            return "found something";
+    }
+    return "didnt find";
+}
+
+function doSomething(foundString) {
+    if(foundString == "found something") {
+        console.log("hi i found something");
+    }
+    else {
+        console.log("nope");
+    }
+}
+
+function getDiseaseDisambiguation(loggedIn, emailIfLoggedIn, diseaseName, response, callback) {
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+        var querystring = "SELECT pk_Diseases FROM Diseases WHERE Disease=?;";
+        connection.query(querystring, [diseaseName], function(err, rows, fields) {
+            if(err) {
+                throw err;
+            }
+
+            if( !(typeof rows != "undefined" && rows != null && rows.length > 0) ) {
+                callback(); //failure
+            } else {
+                querystring = "SELECT fk_Biomolecules FROM Biomolecules_Sources_Association WHERE fk_Diseases=?;";
+                connection.query(querystring, [rows[0].pk_Diseases], function(err, rows, fields) {
+                    if(err) {
+                        throw err;
+                    }
+
+                    var numBiomarkers = rows.length;
+                    var names = [];
+                    var querystring = "SELECT Name FROM Biomolecule_Names WHERE ";
+                    for(var i=0; i<numBiomarkers; i++) {
+                        querystring += "fk_Biomolecules=" + rows[i].fk_Biomolecules + " OR ";
+                    }
+                    querystring = querystring.slice(0,querystring.length-4) + " ORDER BY Name;";
+                    connection.query(querystring, function(err, rows, fields) {
+                        if(err) {
+                            throw err;
+                        }
+
+                        for(var i=0; i<rows.length; i++) {
+                            names.push(rows[i].Name);
+                        }
+
+                        response.render('pages/disambiguation', {
+                            disease: diseaseName,
+                            numBiomarkers: numBiomarkers,
+                            names: names,
+                            logged_in: loggedIn,
+                            email: emailIfLoggedIn
+                        });//response.render
+                    });//query
+                });//query
+            }
+        });//query
+    });//connection
+}//end function
+
+function getDiseaseList(callback) {
+    pool.getConnection(function(err, connection) {
+        if(err) {
+            throw err;
+        }
+        var querystring = "SELECT Disease FROM Diseases;";
+        connection.query(querystring, function(err, rows, fields) {
+            if(err) {
+                throw err;
+            }
+            var diseases = [];
+            for(var i=0; i<rows.length; i++) {
+                diseases.push(rows[i].Disease);
+            }
+            callback(diseases);
+        });
+    });
 }
 
 module.exports.loginUser = loginUser;
@@ -340,3 +546,6 @@ module.exports.getDossierInfo = getDossierInfo;
 module.exports.createUnverifiedAccount = createUnverifiedAccount;
 module.exports.verifyAccount = verifyAccount;
 module.exports.getAccountInfo = getAccountInfo;
+module.exports.getEditingInfo = getEditingInfo;
+module.exports.getDiseaseList = getDiseaseList;
+module.exports.addNewBiomarker = addNewBiomarker;

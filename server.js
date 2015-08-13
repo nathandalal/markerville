@@ -64,13 +64,16 @@ queries.getHomepageNumbers(function(homepageStats) {
                 logged_in: false
             });
         } else {
-            response.render('pages/edit-main', {
-                logged_in: true,
-                email: request.cookies.email
+            queries.getEditingInfo(function(editingInfo) {
+                response.render('pages/edit-main', {
+                    logged_in: true,
+                    email: request.cookies.email,
+                    editingInfo: editingInfo
+                });
             });
         }
     });
-    app.post('contribute', function (request, response) {
+    app.post('/contribute', function (request, response) {
         console.log('got a contribute POST request');
         var loggedIn = (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined);
         if (!loggedIn) {
@@ -79,6 +82,10 @@ queries.getHomepageNumbers(function(homepageStats) {
             });
         } else {
             console.log(request.body);
+            queries.addNewBiomarker(loggedIn, request.cookies.email, request.body, response, function() {
+                //do something after biomarker is added
+                console.log('done');
+            });
         }
     });
 
@@ -88,6 +95,18 @@ queries.getHomepageNumbers(function(homepageStats) {
         response.render('pages/about', {
             logged_in: (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined),
             email: request.cookies.email
+        });
+    });
+
+    //routing by-disease
+    app.get("/by-disease", function (request, response) {
+        console.log('got a GET request from by-disease');
+        queries.getDiseaseList(function(diseases) {
+            response.render('pages/by-disease', {
+                diseases: diseases,
+                logged_in: (typeof request.cookies.email !='undefined' && request.cookies.email !=undefined),
+                email: request.cookies.email
+            });
         });
     });
 

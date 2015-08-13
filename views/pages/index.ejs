@@ -24,16 +24,19 @@
                 <% } %>
                 <br>
                 <% if(search_failed) { %>
-                    <p style="text-align: center;">
+                    <div style="text-align: center;">
                         <strong><%= biomarkerName %></strong>
-                        could not be found in the Markerville database.<br><br>
-                    </p>
+                        could not be found in the Markerville database.<br><br><br>
+                    </div>
+                    <br>
                 <% } %>
                 <form id="main_search_bar" method="get">
                     <span>
-                        <input type="search" id="search_bar" name="biomarker" placeholder="Enter a biomarker..." required>
+                        <input type="search" id="search_bar" name="biomarker" placeholder="Search..." required>
                     </span>
                     <input type="button" id="search_button" value="Search">
+                    <br><br>
+                    Search for biomarkers or diseases. You can also <a href="/by-disease">browse biomarkers by disease</a>.
                 </form>
                 <br>
             </section>
@@ -54,7 +57,7 @@
                 <li class="attribute">
                     <img id="users_attribute_img"
                     src="images/users_attribute.png" alt="Users">
-                    <h3><%= num_users %> Editors</h3>
+                    <h3><%= num_users %> Contributors</h3>
                 </li>
             </ul>
         </div>

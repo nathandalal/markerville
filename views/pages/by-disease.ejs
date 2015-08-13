@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body id="top">
+
+    <div id="wrapper">
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <% include ../partials/header %>
+            </header>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div id="main_content_wrap" class="outer">
+            <section id="main_content" class="inner">
+                <p>
+                    Browse biomarkers by disease. Click on one of the following links to see biomarkers under this disease.
+                </p>
+                <ul class="disambiguation_list">
+                    <% for(var i=0; i<diseases.length; i++) { %>
+                        <li><a href="/?biomarker=<%= diseases[i] %>"><%= diseases[i] %></a></li>
+                    <% } %>
+                </ul>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <% include ../partials/footer %>
+            </footer>
+        </div>
+
+    </div><!-- END WRAPPER -->
+
+</body>
+
+<% if(logged_in) { %>
+<% include ../partials/navbar_loggedin %>
+<% } else { %>
+<% include ../partials/navbar %>
+<% } %>
+
+</html>

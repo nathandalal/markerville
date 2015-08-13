@@ -6,7 +6,7 @@ function appendName(li_element_id) {
     headerspan.innerHTML = "<br>Another Name: &nbsp;&nbsp;";
 
     var newspan = document.createElement('span');
-    newspan.innerHTML = "<input type='text' name='biomoleculeNames[]'>&nbsp;";
+    newspan.innerHTML = "<input type='text' name='biomoleculeNames[]' required>&nbsp;";
 
     var buttons_span = document.createElement('span');
     buttons_span.innerHTML = "<input class='small_button' type='button' " + 
@@ -25,12 +25,51 @@ function removeName(removeButtonNode) {
     removingSpan.parentNode.removeChild(removingSpan);
 }
 
-function showSubmit() {
-    document.getElementById('editing-submit-button').style.display = 'inline-block';
-    document.getElementById('alternate-submit-button-text').style.display = 'none';
+function appendTrial(ul_element_id, discoveryList) {
+    var listElement = document.createElement('li');
+
+    var header_disc_span = document.createElement('span');
+    header_disc_span.style.fontWeight = 'bold';
+    header_disc_span.innerHTML = "<br>Method of Discovery: &nbsp;&nbsp;";
+
+    var disc_span = document.createElement('span');
+    var text = "<select name='sources[][trials][][discoveryMethod]' required>" +
+                            "<option value='' disabled selected> -- discovery method -- </option>";
+    for(var i in discoveryList) {
+        text += "<option value=" + (parseInt(i)+1) + ">" + discoveryList[i] + "</option>";
+    }
+    text += "</select>" + "<br>";
+    disc_span.innerHTML = text;
+
+    var header_num_span = document.createElement('span');
+    header_num_span.style.fontWeight = 'bold';
+    header_num_span.innerHTML = "# Patients: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+                            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+
+    var num_span = document.createElement('span');
+    num_span.innerHTML = '<input type="number" name="sources[][trials][][numPatients]">';
+
+    var buttons_span = document.createElement('span');
+
+    buttons_span.innerHTML = "<input class='small_button' type='button' " + 
+                                "onclick='appendTrial" + '("trials_editing_section", ' + 
+                                JSON.stringify(discoveryList) +
+                                ');' + "' value='+'>&nbsp;" +
+                                "<input class='small_button' type='button' " + 
+                                "onclick='removeTrial" + '(this);' + "'value='-'>";
+
+    listElement.appendChild(header_disc_span);
+    listElement.appendChild(disc_span);
+    listElement.appendChild(header_num_span);
+    listElement.appendChild(num_span);
+    listElement.appendChild(buttons_span);
+    document.getElementById(ul_element_id).appendChild(listElement);
 }
 
-function hideSubmit() {
-    document.getElementById('editing-submit-button').style.display = 'none';
-    document.getElementById('alternate-submit-button-text').style.display = 'inline-block';
-} 
+function removeTrial(removeButtonNode) {
+    removeName(removeButtonNode);
+}
+
+function appendSource(li_element_id) {
+    alert('Adding multiple sources to one biomarker is not supported yet. Sorry!');
+}

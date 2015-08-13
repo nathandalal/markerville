@@ -18,9 +18,13 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-                <div>Add a new biomarker to Markerville!<br><br></div>
+                <div><strong>Add a new biomarker to Markerville!</strong><br>
+                    <small>Entries from <strong>Internet Explorer</strong>, <strong>Edge</strong> or <strong>Safari</strong>
+                            may not work. Please switch to another browser if applicable.</small>
+                    <br><br>
+                </div>
                 <form id="editing-ux" method="post">
-                    <div id="biomarker_editing_section">
+                    <div id="biomolecule_editing_section">
                         <span class="editing_header">Biomolecule Names<br><br></span>
                         <ul id="name_editing_section" class="editing_lists">
                             <li id="name_inputs">
@@ -37,26 +41,137 @@
                         <ul class="editing_lists">
                             <li>
                                 <span style="font-weight: bold;">Medium: &nbsp;</span>
-                                <select name=biomoleculeMedium>
-                                    <option>Blood Plasma</option>
-                                    <option>Protein Serum</option>
+                                <select name="biomoleculeMedium" required>
+                                    <option value="" disabled selected> -- medium -- </option>
+                                    <% for(var mediumIndex in editingInfo.biomoleculeMediumList) { %>
+                                        <option value=<%= parseInt(mediumIndex) + 1 %>><%= editingInfo.biomoleculeMediumList[mediumIndex] %></option>
+                                    <% } %>
                                 </select>
                                 <br><small>The medium refers to where the biomolecule is found or discovered in the body.</small>
                             </li>
                             <br>
                             <li>
                                 <span style="font-weight: bold;">Type: &nbsp;</span>
-                                <span><input type="text" name="biomoleculeMedium" required></span>
+                                <select name="biomoleculeType" required>
+                                    <option value="" disabled selected> -- biomolecule type -- </option>
+                                    <% for(var typeIndex in editingInfo.biomoleculeTypeList) { %>
+                                        <option value=<%= parseInt(typeIndex) + 1 %>><%= editingInfo.biomoleculeTypeList[typeIndex] %></option>
+                                    <% } %>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="sources_editing_section">
+                        <ul id="sourcesEditingSection" class="editing_lists">
+                            <li id="sources_inputs">
+                                <span class="big_editing_header">source #1</span>
+                                &nbsp;&nbsp;&nbsp;<input class="small_button" type="button" onclick="appendSource('sources_inputs');" value="+">
+                                <br><br>
+                                <span class="editing_header">General Source Information<br><br></span>
+                                <ul class="editing_lists">
+                                    <li>
+                                        <span style="font-weight: bold;">Source ID: &nbsp;</span>
+                                        <span><input type="text" name="sources[][id]" required></span>
+                                        <br><small>This should be a database ID or something similar.<br>
+                                        If someone were to Google this ID, they should find the source.</small>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Biomolecule State: &nbsp;</span><br>
+                                        <span><textarea name="sources[][biomolecule_state]" required></textarea></span>
+                                        <br><small>Say a little bit about the state of the biomarker.<br>
+                                        Was it truncated, overexpressed, down-regulated?</small>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Drug Name: &nbsp;</span>
+                                        <span><input type="text" name="sources[][drug_name]"></span>
+                                        <br><small>If the biomarker is involved in drug development, list the name of the drug.<br>
+                                        (This field is optional.)</small>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">URL: &nbsp;</span>
+                                        <span><input type="text" name="sources[][url]" required></span>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Source Type: &nbsp;</span>
+                                        <select name="sources[][type]" required>
+                                            <option value="" disabled selected> -- source type -- </option>
+                                            <% for(var sourceTypeIndex in editingInfo.sourceTypeList) { %>
+                                                <option value=<%= parseInt(sourceTypeIndex) + 1 %>><%= editingInfo.sourceTypeList[sourceTypeIndex] %></option>
+                                            <% } %>
+                                        </select>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Original Source Database: &nbsp;</span>
+                                        <select name="sources[][original_source_database]" required>
+                                            <option value="" disabled selected> -- original database -- </option>
+                                            <% for(var dbIndex in editingInfo.sourceOriginalDatabaseList) { %>
+                                                <option value=<%= parseInt(dbIndex) + 1 %>><%= editingInfo.sourceOriginalDatabaseList[dbIndex] %></option>
+                                            <% } %>
+                                        </select>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Biomarker Purpose: &nbsp;</span>
+                                        <select name="sources[][purpose]" required>
+                                            <option value="" disabled selected> -- purpose -- </option>
+                                            <% for(var sourcePurposeIndex in editingInfo.sourcePurposeList) { %>
+                                                <option value=<%= parseInt(sourcePurposeIndex) + 1 %>><%= editingInfo.sourcePurposeList[sourcePurposeIndex] %></option>
+                                            <% } %>
+                                        </select>
+                                        <br><small>What clinical use would this biomarker have? What stage is it useful for?</small>
+                                    </li>
+                                    <br>
+                                    <li>
+                                        <span style="font-weight: bold;">Disease: &nbsp;</span>
+                                        <input list="diseases_input_datalist" name="sources[][disease]" required>
+                                        <datalist id="diseases_input_datalist">
+                                            <% for(var sourceDiseaseIndex in editingInfo.sourceDiseaseList) { %>
+                                                <option value="<%= editingInfo.sourceDiseaseList[sourceDiseaseIndex] %>"><%= editingInfo.sourceDiseaseList[sourceDiseaseIndex] %></option>
+                                            <% } %>
+                                        </datalist>
+                                        <br><small>Check our disease list first before entering a new disease that may already exist.</small>
+                                    </li>
+                                    <br><br>
+                                </ul>
+                                <span class="editing_header">Trials:<br><br></span>
+                                <ul id="trials_editing_section">
+                                    <li id="trial_inputs">
+                                        <span style="font-weight: bold;">Method of Discovery: &nbsp;</span>
+                                        <span>
+                                            <select name="sources[][trials][][discoveryMethod]" required>
+                                                <option value="" disabled selected> -- discovery method -- </option>
+                                                <% for(var discIndex in editingInfo.sourceDiscoveryMethodList) { %>
+                                                    <option value=<%= parseInt(discIndex) + 1 %>><%= editingInfo.sourceDiscoveryMethodList[discIndex] %></option>
+                                                <% } %>
+                                            </select>
+                                            <br>
+                                        </span>
+                                        <span style="font-weight: bold;"># Patients: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <span><input type="number" name="sources[][trials][][numPatients]"></span>
+                                        <span>
+                                            <input class="small_button" type="button" onclick='appendTrial("trials_editing_section", <%- JSON.stringify(editingInfo.sourceDiscoveryMethodList) %>);' value="+">
+                                    </li>
+                                </ul>
+                                <br>
+                                <small>A trial method is necessary but the number of patients is not.<br>
+                                Please list all trials conducted as per the source.</small>
+                                <br>
                             </li>
                         </ul>
                     </div>
                     <div id="submit_editing_section">
-                        <span id="alternate-submit-button-text">A button will appear to submit the biomarker to Markerville when all fields are completed.<br><br></span>
-                        <span id="editing-submit-button"><input type="submit" id="submit_button" value="Add Biomarker"><br><br></span>
+                        <span><input type="submit" id="submit_button" value="Add Biomarker"><br><br></span>
                     </div>
                 </form>
-                <script type="text/javascript">showSubmit();</script> <!-- HIDE SUBMIT BUTTON AT STARTUP -->
             </section>
+            <p style="text-align: center">
+            Contact us with any issues in submitting biomarkers to Markerville. If you have vital information that you did not know how to enter into the database, please let us know and we can adjust our structure to better serve the Markerville community.
+            </p>
         </div>
 
         <!-- FOOTER  -->
