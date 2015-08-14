@@ -18,10 +18,14 @@
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
                 <p>
-                    A biomarker in your submission called 
-                    <a href="/?biomarker=<%= biomarkerName %>"><%= biomarkerName %></a>
-                    already exists in the Markerville database.<br><br>
-                    You can navigate to it to find more information or you can 
+                    The following biomarker names in your submission
+                    already exist in the Markerville database.
+                    <ul>
+                        <% for(var i=0; i<biomarkerNames.length; i++) { %>
+                            <li><a href="/?biomarker=<%= biomarkerNames[i] %>"><%= biomarkerNames[i] %></a></li>
+                        <% } %>
+                    </ul>
+                    You can navigate to them to find more information or you can 
                     <a href="/contribute">restart your contribution</a>.
                 </p>
             </section>

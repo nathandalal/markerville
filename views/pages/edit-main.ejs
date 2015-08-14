@@ -143,12 +143,13 @@
                                     <li id="trial_inputs">
                                         <span style="font-weight: bold;">Method of Discovery: &nbsp;</span>
                                         <span>
-                                            <select name="sources[][trials][][discoveryMethod]" required>
+                                            <input list="diseases_input_datalist" name="sources[][trials][][discoveryMethod]" required>
+                                            <datalist id="diseases_input_datalist">
                                                 <option value="" disabled selected> -- discovery method -- </option>
                                                 <% for(var discIndex in editingInfo.sourceDiscoveryMethodList) { %>
                                                     <option value=<%= parseInt(discIndex) + 1 %>><%= editingInfo.sourceDiscoveryMethodList[discIndex] %></option>
                                                 <% } %>
-                                            </select>
+                                            </datalist>
                                             <br>
                                         </span>
                                         <span style="font-weight: bold;"># Patients: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

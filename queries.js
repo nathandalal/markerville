@@ -417,58 +417,43 @@ function checkIfBiomarkerExists(biomoleculeNames, callback) {
 }
 
 function addNewBiomarker(loggedIn, emailIfLoggedIn, biomarkerInfo, response, callback) {
-    var foundArray = buildFoundArray(biomarkerInfo);
-    var yesOrNo = checkFoundArray(foundArray);
-    doSomething(yesOrNo);
-}
-
-function buildFoundArray(biomarkerInfo) {
-    var foundArray = [];
-    //  confirming connection to DB
     pool.getConnection(function(err, connection) {
         if(err) {
             throw err;
         }
-
-        // comparing query string against DB entries
+        var querystring = "SELECT Name FROM Biomolecule_Names WHERE ";
         for(var i=0; i<biomarkerInfo.biomoleculeNames.length; i++) {
-            var querystring = "SELECT Name FROM Biomolecule_Names WHERE Name=?;";
-            connection.query(querystring, [biomarkerInfo.biomoleculeNames[i]], function(err, rows, fields) {
-                if(err) {
-                    throw err;
+            querystring += "Name= " + connection.escape(biomarkerInfo.biomoleculeNames[i]) + " OR ";
+        }
+        querystring = querystring.slice(0,querystring.length-4) + ";";
+        connection.query(querystring, function(err, rows, fields) {
+            if(err) {
+                throw err;
+            }
+
+            if (typeof rows != "undefined" && rows != null && rows.length > 0) {
+                var conflictingNames = [];
+                for(var nameElement in rows) {
+                    conflictingNames.push(rows[nameElement].Name);
                 }
-                // check entry against constraints
-                if(typeof rows != "undefined" && rows != null && rows.length > 0) {
-                    // if constraints are met set Found := TRUE
-                    foundArray.push(true);
-                }
-                else {
-                    foundArray.push(false);
-                }
-                // log each row check
-            });//end 1 query
-        }//end loop
-        console.log(foundArray);
-        return foundArray;
+                response.render("pages/found-biomarker-while-editing", {
+                    biomarkerNames: conflictingNames,
+                    logged_in: loggedIn,
+                    email: emailIfLoggedIn
+                });
+            } else {
+                console.log("request to add biomarker passed db check");
+                querystring = "";
+                connection.query(querystring, function(err, rows, fields) {
+                    if(err) {
+                        throw err;
+                    }
+
+                                        
+                });
+            }
+        });
     });
-}
-
-function checkFoundArray(foundArray) {
-    console.log(foundArray);
-    for(var i=0; i<foundArray.length; i++) {
-        if(foundArray[i])
-            return "found something";
-    }
-    return "didnt find";
-}
-
-function doSomething(foundString) {
-    if(foundString == "found something") {
-        console.log("hi i found something");
-    }
-    else {
-        console.log("nope");
-    }
 }
 
 function getDiseaseDisambiguation(loggedIn, emailIfLoggedIn, diseaseName, response, callback) {
