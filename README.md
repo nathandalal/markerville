@@ -10,4 +10,4 @@ Built with Node.js, Express, and MySQL.
 Thanks for viewing! More coming soon!
 
 [Check out our poster!](poster)
-![Poster Image](poster/poster.pdf)
+![Poster Image](poster/poster.png)
