@@ -8,3 +8,6 @@ Developed by Mallick Lab at the Stanford Canary Center for Cancer Early Detectio
 Built with Node.js, Express, and MySQL.
 
 Thanks for viewing! More coming soon!
+
+[Check out our poster!](poster)
+![Poster Image](poster/poster.png)
