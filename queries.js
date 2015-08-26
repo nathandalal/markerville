@@ -95,6 +95,9 @@ function getDossierInfo(loggedIn, emailIfLoggedIn, biomarkerName, response, call
 
                     //could be multiple sources for one biomarker - begin reading info into sources section of biomarkerInfo
                     for(var jsonE in rows[2]) {
+
+                        if(jsonE > 0)
+                            biomarkerInfo['Sources'][jsonE] = {};
                         biomarkerInfo['Sources'][jsonE]["Source MySQL ID"] = rows[2][jsonE].fk_Sources;
 
                         //load array of trial objects into individual paper object

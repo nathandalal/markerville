@@ -33,12 +33,7 @@ function appendTrial(ul_element_id, discoveryList) {
     header_disc_span.innerHTML = "<br>Method of Discovery: &nbsp;&nbsp;";
 
     var disc_span = document.createElement('span');
-    var text = "<select name='sources[][trials][][discoveryMethod]'>" +
-                            "<option value='' disabled selected> -- discovery method -- </option>";
-    for(var i in discoveryList) {
-        text += "<option value=" + (parseInt(i)+1) + ">" + discoveryList[i] + "</option>";
-    }
-    text += "</select>" + "<br>";
+    var text = '<input list="discovery_input_datalist" name="sources[][disease]" required><br>'
     disc_span.innerHTML = text;
 
     var header_num_span = document.createElement('span');

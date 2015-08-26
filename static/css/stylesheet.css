@@ -33,7 +33,7 @@ h2 {
 }
  
 div {
-    border-bottom: 2px solid #cbe5ff;
+    border-bottom: 2px solid #dddddd;
     padding: 5px 20px 0 20px;
     margin: 10px 0;
 }
@@ -269,7 +269,7 @@ h1 {
 #accordion h1 {
     line-height:1.2;
     font-size:20px;
-    background-color: rgba(1, 128, 255, 0.3);
+    background-color: rgba(0, 91, 185, 0.6);
     margin:0;
     padding: 10px 10px 10px 30px;
 }
@@ -291,7 +291,7 @@ h1 {
 
 #accordion section.ac_hidden {
     height:44px;
-    background-color: rgba(1, 128, 255, 0.3);
+    background-color: rgba(0, 91, 185, 0.6);
 }
 #accordion .pointer {
     padding:0;
@@ -302,7 +302,7 @@ h1 {
     color:white;
 }
 #accordion section:not(.ac_hidden) h1 {
-    background-color: rgba(0, 91, 181, 1);
+    background-color: rgba(0, 91, 185, 1);
 }
 
 #accordion section:not(.ac_hidden) .pointer {
@@ -377,12 +377,12 @@ input[list]:focus {
     text-align: left;
     padding-top: 5px;
     padding-bottom: 4px;
-    background-color: rgba(0, 91, 181, 1);
+    background-color: rgba(0, 91, 185, 1);
     color: #ffffff;
 }
 
 #dossier_trials_table td {
-    background-color: rgba(0, 128, 255, 0.3);
+    background-color: rgba(0, 91, 185, 0.3);
 }
 
 div .dossier_source_header {
